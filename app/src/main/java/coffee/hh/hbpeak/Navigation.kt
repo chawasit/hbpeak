@@ -21,11 +21,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import coffee.hh.hbpeak.Destinations.SIGN_IN_ROUTE
+import coffee.hh.hbpeak.Destinations.SIGN_UP_ROUTE
 import coffee.hh.hbpeak.Destinations.WELCOME_ROUTE
+import coffee.hh.hbpeak.signinsignup.route.SignInRoute
+import coffee.hh.hbpeak.signinsignup.route.SignUpRoute
 import coffee.hh.hbpeak.signinsignup.route.WelcomeRoute
 
 object Destinations {
     const val WELCOME_ROUTE = "welcome"
+    const val SIGN_UP_ROUTE = "signup/{email}"
+    const val SIGN_IN_ROUTE = "signin/{email}"
 }
 
 @Composable
@@ -35,6 +41,7 @@ fun HBPeakNavHost(
     NavHost(
         navController = navController,
         startDestination = WELCOME_ROUTE,
+
     ) {
         composable(WELCOME_ROUTE) {
             WelcomeRoute(
@@ -47,6 +54,34 @@ fun HBPeakNavHost(
                 onSignInAsGuest = {
                     navController.navigate(WELCOME_ROUTE)
                 },
+            )
+        }
+
+        composable(SIGN_IN_ROUTE) {
+            val startingEmail = it.arguments?.getString("email")
+            SignInRoute(
+                email = startingEmail,
+                onSignInSubmitted = {
+                    navController.navigate(WELCOME_ROUTE)
+                },
+                onSignInAsGuest = {
+                    navController.navigate(WELCOME_ROUTE)
+                },
+                onNavUp = navController::navigateUp,
+            )
+        }
+
+        composable(SIGN_UP_ROUTE) {
+            val startingEmail = it.arguments?.getString("email")
+            SignUpRoute(
+                email = startingEmail,
+                onSignUpSubmitted = {
+                    navController.navigate(WELCOME_ROUTE)
+                },
+                onSignInAsGuest = {
+                    navController.navigate(WELCOME_ROUTE)
+                },
+                onNavUp = navController::navigateUp,
             )
         }
     }
