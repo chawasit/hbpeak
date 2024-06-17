@@ -38,6 +38,7 @@ data class HomeNavigationItem(
     val icon: ImageVector,
     val onCardClick: () -> Unit
 )
+
 @Preview
 @Composable
 fun HomeContent(contentPadding: PaddingValues = PaddingValues()) {
