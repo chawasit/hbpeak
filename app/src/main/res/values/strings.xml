@@ -16,7 +16,7 @@
   -->
 <resources>
     <string name="app_name">HB Peak</string>
-    <string name="app_tagline">Better than your stock app</string>
+    <string name="app_tagline">Always Strive For Knowledge</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
@@ -79,4 +79,5 @@
     <string name="strongly_dislike">Strongly\nDislike</string>
     <string name="strongly_like">Strongly\nLike</string>
     <string name="neutral">Neutral</string>
+    <string name="home_bar">Dashboard</string>
 </resources>

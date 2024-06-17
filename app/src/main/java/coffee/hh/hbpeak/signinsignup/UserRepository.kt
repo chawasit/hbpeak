@@ -21,8 +21,8 @@ import androidx.compose.runtime.Immutable
 sealed class User {
     @Immutable
     data class LoggedInUser(val email: String) : User()
-    object GuestUser : User()
-    object NoUserLoggedIn : User()
+    data object GuestUser : User()
+    data object NoUserLoggedIn : User()
 }
 
 /**
@@ -31,6 +31,7 @@ sealed class User {
  * In a production app, this class would also handle the communication with the backend for
  * sign in and sign up.
  */
+@Suppress("unused")
 object UserRepository {
 
     private var _user: User = User.NoUserLoggedIn

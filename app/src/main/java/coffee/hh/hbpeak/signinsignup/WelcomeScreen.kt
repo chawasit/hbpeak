@@ -23,6 +23,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -112,13 +114,15 @@ private fun Logo(
     lightTheme: Boolean = LocalContentColor.current.luminance() < 0.5f,
 ) {
     val assetId = if (lightTheme) {
-        R.drawable.ic_logo_light
+        R.drawable.hh_logo_n
     } else {
-        R.drawable.ic_logo_dark
+        R.drawable.hh_logo_w
     }
     Image(
         painter = painterResource(id = assetId),
-        modifier = modifier,
+        modifier = modifier
+            .width(300.dp)
+            .padding(top = 48.dp),
         contentDescription = null
     )
 }
