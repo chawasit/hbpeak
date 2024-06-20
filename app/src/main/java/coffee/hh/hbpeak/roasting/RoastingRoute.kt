@@ -44,7 +44,7 @@ fun RoastingContent(
     enqueueCommand: (String) -> Unit,
 ) {
     Scaffold(
-        topBar = { RoastingTopAppBar(topAppBarText = "Control App", onNavUp = onNavUp) },
+        topBar = { RoastingTopAppBar(topAppBarText = "Roasting", onNavUp = onNavUp) },
         content = { contentPadding ->
             RoastingContent(contentPadding, machineState, enqueueCommand)
         }
