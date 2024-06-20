@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
@@ -43,6 +42,7 @@ fun RoastingContent(
     when {
         showDialog.value -> {
             NumberPadDialog(
+                title = "Set " + currentField.value,
                 initialValue = currentValue.value,
                 minValue = minValue.intValue,
                 maxValue = maxValue.intValue,
@@ -55,7 +55,7 @@ fun RoastingContent(
                                 val command = MachineStateInterpreter.generateControlCommand(
                                     machineState,
                                     MachineControlUnitIds.DRUM_RPM,
-                                    if(value.toInt() == 0) MachineStatus.OFF else MachineStatus.ON,
+                                    if (value.toInt() == 0) MachineStatus.OFF else MachineStatus.ON,
                                     value.toInt()
                                 )
                                 enqueueCommand(command)
@@ -67,7 +67,7 @@ fun RoastingContent(
                                 val command = MachineStateInterpreter.generateControlCommand(
                                     machineState,
                                     MachineControlUnitIds.FAN_LEVEL,
-                                    if(value.toInt() == 0) MachineStatus.OFF else MachineStatus.ON,
+                                    if (value.toInt() == 0) MachineStatus.OFF else MachineStatus.ON,
                                     value.toInt()
                                 )
                                 enqueueCommand(command)
@@ -79,7 +79,7 @@ fun RoastingContent(
                                 val command = MachineStateInterpreter.generateControlCommand(
                                     machineState,
                                     MachineControlUnitIds.PREHEAT_TEMPERATURE,
-                                    if(value.toInt() == 0) MachineStatus.OFF else MachineStatus.ON,
+                                    if (value.toInt() == 0) MachineStatus.OFF else MachineStatus.ON,
                                     value.toInt()
                                 )
                                 enqueueCommand(command)
@@ -91,7 +91,7 @@ fun RoastingContent(
                                 val command = MachineStateInterpreter.generateControlCommand(
                                     machineState,
                                     MachineControlUnitIds.GAS_LEVEL,
-                                    if(value.toInt() == 0) MachineStatus.OFF else MachineStatus.ON,
+                                    if (value.toInt() == 0) MachineStatus.OFF else MachineStatus.ON,
                                     value.toInt()
                                 )
                                 enqueueCommand(command)
@@ -187,105 +187,115 @@ fun RoastingContent(
             Text("Gas Pressure: ${machineState.gasPressure} Pa")
 
 
-            Button(
-                onClick = {
+            SwitchWithLabel(
+                label = "Drum RPM: ${machineState.drumRpm}",
+                state = machineState.drumOnStatus,
+                onStateChange = {
                     currentField.value = "Drum RPM"
                     currentValue.value = machineState.drumRpm.toString()
                     showDialog.value = true
                     showTurnOffButton.value = false
                     minValue.intValue = 20
                     maxValue.intValue = 79
-                },
-            ) {
-                Text("Drum RPM: ${machineState.drumRpm}")
-            }
+                })
 
-            Button(
-                onClick = {
+
+            SwitchWithLabel(
+                label = "Air: ${machineState.fanLevel}",
+                state = machineState.fanOnStatus,
+                onStateChange = {
                     currentField.value = "Air Speed"
                     currentValue.value = machineState.fanLevel.toString()
                     showDialog.value = true
                     showTurnOffButton.value = false
                     minValue.intValue = 30
                     maxValue.intValue = 100
-                },
-            ) {
-                Text("Air Speed: ${machineState.fanLevel}")
-            }
+                })
 
-            Button(
-                onClick = {
+
+            SwitchWithLabel(
+                label = "Preheat: ${machineState.preheatTemperature}",
+                state = machineState.preheatTemperatureOnStatus,
+                onStateChange = {
                     currentField.value = "Preheat Temperature"
                     currentValue.value = machineState.preheatTemperature.toInt().toString()
                     showDialog.value = true
                     showTurnOffButton.value = true
                     minValue.intValue = 0
                     maxValue.intValue = 300
-                },
-            ) {
-                Text("Preheat Temperature: ${machineState.preheatTemperature}")
-            }
+                })
 
-            Button(
-                onClick = {
+            SwitchWithLabel(
+                label = "Gas Level: ${machineState.gasLevel}",
+                state = machineState.gasOnStatus,
+                onStateChange = {
                     currentField.value = "Gas Level"
                     currentValue.value = machineState.gasLevel.toInt().toString()
                     showDialog.value = true
                     showTurnOffButton.value = true
                     minValue.intValue = 0
                     maxValue.intValue = 99
-                },
-            ) {
-                Text("Gas Level: ${machineState.gasLevel}")
-            }
+                })
 
-            SwitchWithLabel(label = "Drum Door", state = machineState.drumDoorOpenStatus, onStateChange = {
-                coroutineScope.launch {
-                    val command = MachineStateInterpreter.generateControlCommand(
-                        machineState,
-                        MachineControlUnitIds.DRUM_DOOR,
-                        if (it) MachineStatus.ON else MachineStatus.OFF,
-                        0
-                    )
-                    enqueueCommand(command)
-                }
-            })
+            SwitchWithLabel(
+                label = "Drum Door",
+                state = machineState.drumDoorOpenStatus,
+                onStateChange = {
+                    coroutineScope.launch {
+                        val command = MachineStateInterpreter.generateControlCommand(
+                            machineState,
+                            MachineControlUnitIds.DRUM_DOOR,
+                            if (it) MachineStatus.ON else MachineStatus.OFF,
+                            0
+                        )
+                        enqueueCommand(command)
+                    }
+                })
 
-            SwitchWithLabel(label = "Bean Holder", state = machineState.beanHolderOpenStatus, onStateChange = {
-                coroutineScope.launch {
-                    val command = MachineStateInterpreter.generateControlCommand(
-                        machineState,
-                        MachineControlUnitIds.BEAN_HOLDER,
-                        if (it) MachineStatus.ON else MachineStatus.OFF,
-                        0
-                    )
-                    enqueueCommand(command)
-                }
-            })
+            SwitchWithLabel(
+                label = "Bean Holder",
+                state = machineState.beanHolderOpenStatus,
+                onStateChange = {
+                    coroutineScope.launch {
+                        val command = MachineStateInterpreter.generateControlCommand(
+                            machineState,
+                            MachineControlUnitIds.BEAN_HOLDER,
+                            if (it) MachineStatus.ON else MachineStatus.OFF,
+                            0
+                        )
+                        enqueueCommand(command)
+                    }
+                })
 
-            SwitchWithLabel(label = "Cooling Tray Fan", state = machineState.coolingTrayFanRunningStatus, onStateChange = {
-                coroutineScope.launch {
-                    val command = MachineStateInterpreter.generateControlCommand(
-                        machineState,
-                        MachineControlUnitIds.COOLING_TRAY_FAN,
-                        if (it) MachineStatus.ON else MachineStatus.OFF,
-                        0
-                    )
-                    enqueueCommand(command)
-                }
-            })
+            SwitchWithLabel(
+                label = "Cooling Tray Fan",
+                state = machineState.coolingTrayFanRunningStatus,
+                onStateChange = {
+                    coroutineScope.launch {
+                        val command = MachineStateInterpreter.generateControlCommand(
+                            machineState,
+                            MachineControlUnitIds.COOLING_TRAY_FAN,
+                            if (it) MachineStatus.ON else MachineStatus.OFF,
+                            0
+                        )
+                        enqueueCommand(command)
+                    }
+                })
 
-            SwitchWithLabel(label = "Cooling Tray Stir", state = machineState.coolingTrayStirRunningStatus, onStateChange = {
-                coroutineScope.launch {
-                    val command = MachineStateInterpreter.generateControlCommand(
-                        machineState,
-                        MachineControlUnitIds.COOLING_TRAY_STIR,
-                        if (it) MachineStatus.ON else MachineStatus.OFF,
-                        0
-                    )
-                    enqueueCommand(command)
-                }
-            })
+            SwitchWithLabel(
+                label = "Cooling Tray Stir",
+                state = machineState.coolingTrayStirRunningStatus,
+                onStateChange = {
+                    coroutineScope.launch {
+                        val command = MachineStateInterpreter.generateControlCommand(
+                            machineState,
+                            MachineControlUnitIds.COOLING_TRAY_STIR,
+                            if (it) MachineStatus.ON else MachineStatus.OFF,
+                            0
+                        )
+                        enqueueCommand(command)
+                    }
+                })
         }
     }
 }

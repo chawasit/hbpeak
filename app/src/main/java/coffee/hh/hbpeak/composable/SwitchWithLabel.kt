@@ -12,10 +12,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+@Preview
 @Composable
-fun SwitchWithLabel(label: String, state: Boolean, onStateChange: (Boolean) -> Unit) {
+fun SwitchWithLabel(label: String = "text", state: Boolean = false, onStateChange: (Boolean) -> Unit = {}) {
 
     val interactionSource = remember { MutableInteractionSource() }
     Row(
