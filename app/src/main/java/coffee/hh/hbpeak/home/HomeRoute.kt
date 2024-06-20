@@ -5,8 +5,8 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun HomeRoute(
-    navController: NavHostController
+    navController: NavHostController,
 ){
-    HomeScreen(onNavUp = navController::navigateUp)
+    HomeScreen(onNavUp = navController::navigateUp, navController)
 }
 

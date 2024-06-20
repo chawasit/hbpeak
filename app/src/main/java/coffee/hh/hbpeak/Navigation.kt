@@ -6,10 +6,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coffee.hh.hbpeak.Destinations.HOME_ROUTE
+import coffee.hh.hbpeak.Destinations.ROASTING_ROUTE
 import coffee.hh.hbpeak.Destinations.SIGN_IN_ROUTE
 import coffee.hh.hbpeak.Destinations.SIGN_UP_ROUTE
 import coffee.hh.hbpeak.Destinations.WELCOME_ROUTE
 import coffee.hh.hbpeak.home.HomeRoute
+import coffee.hh.hbpeak.roasting.RoastingRoute
 import coffee.hh.hbpeak.signinsignup.route.SignInRoute
 import coffee.hh.hbpeak.signinsignup.route.SignUpRoute
 import coffee.hh.hbpeak.signinsignup.route.WelcomeRoute
@@ -30,12 +32,13 @@ object Destinations {
 
 @Composable
 fun HBPeakNavHost(
+    machineState: MachineState,
+    enqueueCommand: (String) -> Unit,
     navController: NavHostController = rememberNavController(),
 ) {
     NavHost(
         navController = navController,
         startDestination = WELCOME_ROUTE,
-
     ) {
         composable(WELCOME_ROUTE) {
             WelcomeRoute(
@@ -82,6 +85,14 @@ fun HBPeakNavHost(
         composable(HOME_ROUTE) {
             HomeRoute(
                 navController = navController
+            )
+        }
+
+        composable(ROASTING_ROUTE) {
+            RoastingRoute(
+                navController = navController,
+                machineState,
+                enqueueCommand,
             )
         }
     }

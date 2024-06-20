@@ -5,13 +5,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavHostController
+import coffee.hh.hbpeak.Destinations
 import coffee.hh.hbpeak.R
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onNavUp: () -> Unit
+    onNavUp: () -> Unit,
+    navController: NavHostController
 ) {
     val homeBarText: String = stringResource(R.string.home_bar)
     
@@ -22,7 +25,9 @@ fun HomeScreen(
                 onNavUp = onNavUp
             ) },
         content = { contentPadding ->
-            HomeContent(contentPadding = contentPadding)
+            HomeContent(contentPadding = contentPadding, onRoastingClick = {
+                navController.navigate(Destinations.ROASTING_ROUTE)
+            })
         }
     )
 }

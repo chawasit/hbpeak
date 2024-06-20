@@ -1,6 +1,7 @@
 package coffee.hh.hbpeak.home
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.outlined.Fireplace
 import androidx.compose.material.icons.outlined.Inventory
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Wallpaper
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,23 +43,37 @@ data class HomeNavigationItem(
 
 @Preview
 @Composable
-fun HomeContent(contentPadding: PaddingValues = PaddingValues()) {
-
+fun HomeContent(
+    contentPadding: PaddingValues = PaddingValues(),
+    onRoastingClick: () -> Unit = {},
+) {
     val homeNavigationList = listOf(
         HomeNavigationItem(
             title = "Roasting",
             description = "Start your roast!",
             icon = Icons.Outlined.Fireplace,
+            onCardClick = onRoastingClick
+        ),
+        HomeNavigationItem(
+            title = "Auto Profile",
+            description = "More roast without sweating.",
+            icon = Icons.Outlined.AutoGraph,
+            onCardClick = {}
+        ),
+        HomeNavigationItem(
+            title = "Roast Log",
+            description = "View your roast history.",
+            icon = Icons.Outlined.AutoGraph,
             onCardClick = {}
         ),
         HomeNavigationItem(
             title = "Profile",
             description = "Manage your roast profiles.",
-            icon = Icons.Outlined.AutoGraph,
+            icon = Icons.Outlined.Wallpaper,
             onCardClick = {}
         ),
         HomeNavigationItem(
-            title = "Inventory",
+            title = "Green Inventory",
             description = "Manage your green inventory.",
             icon = Icons.Outlined.Inventory,
             onCardClick = {}
@@ -81,19 +97,25 @@ fun HomeContent(contentPadding: PaddingValues = PaddingValues()) {
             onCardClick = {}
         ),
 
-    )
+        )
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = contentPadding,
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        items(homeNavigationList) { item ->
-            HomeButtonCard(
-                title=item.title,
-                description = item.description,
-                icon = item.icon,
-                onCardClick = item.onCardClick)
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = contentPadding,
+            modifier = Modifier.padding(16.dp)
+        ) {
+            items(homeNavigationList) { item ->
+                HomeButtonCard(
+                    title = item.title,
+                    description = item.description,
+                    icon = item.icon,
+                    onCardClick = item.onCardClick
+                )
+            }
         }
     }
 }
@@ -142,7 +164,8 @@ private fun HomeButtonCard(
             Text(
                 text = description,
                 modifier = Modifier
-                    .align(Alignment.Start).padding(top = 8.dp),
+                    .align(Alignment.Start)
+                    .padding(top = 8.dp),
                 color = Color.Gray,
                 fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                 fontStyle = MaterialTheme.typography.bodyMedium.fontStyle,
