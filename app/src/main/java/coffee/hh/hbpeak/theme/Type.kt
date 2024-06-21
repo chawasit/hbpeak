@@ -2,9 +2,8 @@ package coffee.hh.hbpeak.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily
-
-import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.text.googlefonts.Font
+import androidx.compose.ui.text.googlefonts.GoogleFont
 import coffee.hh.hbpeak.R
 
 val provider = GoogleFont.Provider(
@@ -15,14 +14,14 @@ val provider = GoogleFont.Provider(
 
 val bodyFontFamily = FontFamily(
     Font(
-        googleFont = GoogleFont("Prompt"),
+        googleFont = GoogleFont("Athiti"),
         fontProvider = provider,
     )
 )
 
 val displayFontFamily = FontFamily(
     Font(
-        googleFont = GoogleFont("Prompt"),
+        googleFont = GoogleFont("Bebas Neue"),
         fontProvider = provider,
     )
 )

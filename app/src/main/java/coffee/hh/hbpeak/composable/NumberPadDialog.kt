@@ -44,9 +44,18 @@ fun NumberPadDialog(
         } else if (digit == "CLR") {
             value = ""
         } else if (digit == "-10" || digit == "-1" || digit == "+1" || digit == "+10") {
-            value.toIntOrNull()?.let { min(max(it - digit.toInt(), minValue), maxValue) }.toString()
-        } else if (value.length < 3 && value.toIntOrNull() != null) {
-            value += digit
+            value = min(max(value.toInt() + digit.toInt(), minValue), maxValue).toString()
+        } else if (value.isNotEmpty()) {
+            if (
+                (value.length == 1 && value == "0")
+                || value.length == maxValue.toString().length
+                || value.toInt() > maxValue
+                || value.toInt() < minValue
+            ) {
+                value = digit
+            } else {
+                value += digit
+            }
         } else {
             value += digit
         }

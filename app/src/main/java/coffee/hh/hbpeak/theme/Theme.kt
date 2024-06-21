@@ -1,6 +1,5 @@
-@file:Suppress("unused")
-
 package coffee.hh.hbpeak.theme
+
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -9,6 +8,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.SideEffect
@@ -18,9 +18,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
+
 const val stronglyDeemphasizedAlpha = 0.6f
 const val slightlyDeemphasizedAlpha = 0.87f
-const val disabledAlpha = 0.38f
+
+@Immutable
+data class ExtendedColorScheme(
+    val customColor1: ColorFamily,
+    val customColor2: ColorFamily,
+    val customColor3: ColorFamily,
+    val customColor4: ColorFamily,
+    val customColor5: ColorFamily,
+    val customColor6: ColorFamily,
+)
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -250,6 +260,240 @@ private val highContrastDarkColorScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDarkHighContrast,
 )
 
+val extendedLight = ExtendedColorScheme(
+  customColor1 = ColorFamily(
+  customColor1Light,
+  onCustomColor1Light,
+  customColor1ContainerLight,
+  onCustomColor1ContainerLight,
+  ),
+  customColor2 = ColorFamily(
+  customColor2Light,
+  onCustomColor2Light,
+  customColor2ContainerLight,
+  onCustomColor2ContainerLight,
+  ),
+  customColor3 = ColorFamily(
+  customColor3Light,
+  onCustomColor3Light,
+  customColor3ContainerLight,
+  onCustomColor3ContainerLight,
+  ),
+  customColor4 = ColorFamily(
+  customColor4Light,
+  onCustomColor4Light,
+  customColor4ContainerLight,
+  onCustomColor4ContainerLight,
+  ),
+  customColor5 = ColorFamily(
+  customColor5Light,
+  onCustomColor5Light,
+  customColor5ContainerLight,
+  onCustomColor5ContainerLight,
+  ),
+  customColor6 = ColorFamily(
+  customColor6Light,
+  onCustomColor6Light,
+  customColor6ContainerLight,
+  onCustomColor6ContainerLight,
+  ),
+)
+
+val extendedDark = ExtendedColorScheme(
+  customColor1 = ColorFamily(
+  customColor1Dark,
+  onCustomColor1Dark,
+  customColor1ContainerDark,
+  onCustomColor1ContainerDark,
+  ),
+  customColor2 = ColorFamily(
+  customColor2Dark,
+  onCustomColor2Dark,
+  customColor2ContainerDark,
+  onCustomColor2ContainerDark,
+  ),
+  customColor3 = ColorFamily(
+  customColor3Dark,
+  onCustomColor3Dark,
+  customColor3ContainerDark,
+  onCustomColor3ContainerDark,
+  ),
+  customColor4 = ColorFamily(
+  customColor4Dark,
+  onCustomColor4Dark,
+  customColor4ContainerDark,
+  onCustomColor4ContainerDark,
+  ),
+  customColor5 = ColorFamily(
+  customColor5Dark,
+  onCustomColor5Dark,
+  customColor5ContainerDark,
+  onCustomColor5ContainerDark,
+  ),
+  customColor6 = ColorFamily(
+  customColor6Dark,
+  onCustomColor6Dark,
+  customColor6ContainerDark,
+  onCustomColor6ContainerDark,
+  ),
+)
+
+val extendedLightMediumContrast = ExtendedColorScheme(
+  customColor1 = ColorFamily(
+  customColor1LightMediumContrast,
+  onCustomColor1LightMediumContrast,
+  customColor1ContainerLightMediumContrast,
+  onCustomColor1ContainerLightMediumContrast,
+  ),
+  customColor2 = ColorFamily(
+  customColor2LightMediumContrast,
+  onCustomColor2LightMediumContrast,
+  customColor2ContainerLightMediumContrast,
+  onCustomColor2ContainerLightMediumContrast,
+  ),
+  customColor3 = ColorFamily(
+  customColor3LightMediumContrast,
+  onCustomColor3LightMediumContrast,
+  customColor3ContainerLightMediumContrast,
+  onCustomColor3ContainerLightMediumContrast,
+  ),
+  customColor4 = ColorFamily(
+  customColor4LightMediumContrast,
+  onCustomColor4LightMediumContrast,
+  customColor4ContainerLightMediumContrast,
+  onCustomColor4ContainerLightMediumContrast,
+  ),
+  customColor5 = ColorFamily(
+  customColor5LightMediumContrast,
+  onCustomColor5LightMediumContrast,
+  customColor5ContainerLightMediumContrast,
+  onCustomColor5ContainerLightMediumContrast,
+  ),
+  customColor6 = ColorFamily(
+  customColor6LightMediumContrast,
+  onCustomColor6LightMediumContrast,
+  customColor6ContainerLightMediumContrast,
+  onCustomColor6ContainerLightMediumContrast,
+  ),
+)
+
+val extendedLightHighContrast = ExtendedColorScheme(
+  customColor1 = ColorFamily(
+  customColor1LightHighContrast,
+  onCustomColor1LightHighContrast,
+  customColor1ContainerLightHighContrast,
+  onCustomColor1ContainerLightHighContrast,
+  ),
+  customColor2 = ColorFamily(
+  customColor2LightHighContrast,
+  onCustomColor2LightHighContrast,
+  customColor2ContainerLightHighContrast,
+  onCustomColor2ContainerLightHighContrast,
+  ),
+  customColor3 = ColorFamily(
+  customColor3LightHighContrast,
+  onCustomColor3LightHighContrast,
+  customColor3ContainerLightHighContrast,
+  onCustomColor3ContainerLightHighContrast,
+  ),
+  customColor4 = ColorFamily(
+  customColor4LightHighContrast,
+  onCustomColor4LightHighContrast,
+  customColor4ContainerLightHighContrast,
+  onCustomColor4ContainerLightHighContrast,
+  ),
+  customColor5 = ColorFamily(
+  customColor5LightHighContrast,
+  onCustomColor5LightHighContrast,
+  customColor5ContainerLightHighContrast,
+  onCustomColor5ContainerLightHighContrast,
+  ),
+  customColor6 = ColorFamily(
+  customColor6LightHighContrast,
+  onCustomColor6LightHighContrast,
+  customColor6ContainerLightHighContrast,
+  onCustomColor6ContainerLightHighContrast,
+  ),
+)
+
+val extendedDarkMediumContrast = ExtendedColorScheme(
+  customColor1 = ColorFamily(
+  customColor1DarkMediumContrast,
+  onCustomColor1DarkMediumContrast,
+  customColor1ContainerDarkMediumContrast,
+  onCustomColor1ContainerDarkMediumContrast,
+  ),
+  customColor2 = ColorFamily(
+  customColor2DarkMediumContrast,
+  onCustomColor2DarkMediumContrast,
+  customColor2ContainerDarkMediumContrast,
+  onCustomColor2ContainerDarkMediumContrast,
+  ),
+  customColor3 = ColorFamily(
+  customColor3DarkMediumContrast,
+  onCustomColor3DarkMediumContrast,
+  customColor3ContainerDarkMediumContrast,
+  onCustomColor3ContainerDarkMediumContrast,
+  ),
+  customColor4 = ColorFamily(
+  customColor4DarkMediumContrast,
+  onCustomColor4DarkMediumContrast,
+  customColor4ContainerDarkMediumContrast,
+  onCustomColor4ContainerDarkMediumContrast,
+  ),
+  customColor5 = ColorFamily(
+  customColor5DarkMediumContrast,
+  onCustomColor5DarkMediumContrast,
+  customColor5ContainerDarkMediumContrast,
+  onCustomColor5ContainerDarkMediumContrast,
+  ),
+  customColor6 = ColorFamily(
+  customColor6DarkMediumContrast,
+  onCustomColor6DarkMediumContrast,
+  customColor6ContainerDarkMediumContrast,
+  onCustomColor6ContainerDarkMediumContrast,
+  ),
+)
+
+val extendedDarkHighContrast = ExtendedColorScheme(
+  customColor1 = ColorFamily(
+  customColor1DarkHighContrast,
+  onCustomColor1DarkHighContrast,
+  customColor1ContainerDarkHighContrast,
+  onCustomColor1ContainerDarkHighContrast,
+  ),
+  customColor2 = ColorFamily(
+  customColor2DarkHighContrast,
+  onCustomColor2DarkHighContrast,
+  customColor2ContainerDarkHighContrast,
+  onCustomColor2ContainerDarkHighContrast,
+  ),
+  customColor3 = ColorFamily(
+  customColor3DarkHighContrast,
+  onCustomColor3DarkHighContrast,
+  customColor3ContainerDarkHighContrast,
+  onCustomColor3ContainerDarkHighContrast,
+  ),
+  customColor4 = ColorFamily(
+  customColor4DarkHighContrast,
+  onCustomColor4DarkHighContrast,
+  customColor4ContainerDarkHighContrast,
+  onCustomColor4ContainerDarkHighContrast,
+  ),
+  customColor5 = ColorFamily(
+  customColor5DarkHighContrast,
+  onCustomColor5DarkHighContrast,
+  customColor5ContainerDarkHighContrast,
+  onCustomColor5ContainerDarkHighContrast,
+  ),
+  customColor6 = ColorFamily(
+  customColor6DarkHighContrast,
+  onCustomColor6DarkHighContrast,
+  customColor6ContainerDarkHighContrast,
+  onCustomColor6ContainerDarkHighContrast,
+  ),
+)
+
 @Immutable
 data class ColorFamily(
     val color: Color,
@@ -267,7 +511,7 @@ fun HBPeakTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable() () -> Unit
 ) {
   val colorScheme = when {
       dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
