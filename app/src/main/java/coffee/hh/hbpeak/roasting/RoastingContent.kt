@@ -12,10 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -25,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coffee.hh.hbpeak.MachineControlUnitIds
@@ -34,24 +30,6 @@ import coffee.hh.hbpeak.MachineStateInterpreter
 import coffee.hh.hbpeak.MachineStatus
 import coffee.hh.hbpeak.composable.NumberPadDialog
 import coffee.hh.hbpeak.composable.SwitchWithLabel
-import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberAxisLabelComponent
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEndAxis
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberStartAxis
-import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
-import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineSpec
-import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
-import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
-import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
-import com.patrykandpatrick.vico.compose.common.of
-import com.patrykandpatrick.vico.compose.common.shader.color
-import com.patrykandpatrick.vico.compose.common.shader.verticalGradient
-import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
-import com.patrykandpatrick.vico.core.cartesian.data.AxisValueOverrider
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModel
-import com.patrykandpatrick.vico.core.cartesian.data.LineCartesianLayerModel
-import com.patrykandpatrick.vico.core.common.Dimensions
-import com.patrykandpatrick.vico.core.common.shader.DynamicShader
 import kotlinx.coroutines.launch
 
 @Preview(widthDp = 1000, heightDp = 1480, showBackground = true, apiLevel = 34)
@@ -257,7 +235,7 @@ fun RoastingContent(
                             state = machineState.value.gasOnStatus,
                             onStateChange = {
                                 currentField.value = "Gas Level"
-                                currentValue.value = machineState.value.gasLevel.toInt().toString()
+                                currentValue.value = machineState.value.gasLevel.toString()
                                 showDialog.value = true
                                 showTurnOffButton.value = true
                                 minValue.intValue = 0
@@ -363,73 +341,5 @@ fun RoastingContent(
 
 @Composable
 fun RoastingGraph(machineState: MutableState<MachineState>) {
-    val scrollState = rememberVicoScrollState()
-    val zoomState = rememberVicoZoomState()
-    LineChartDark()
+
 }
-
-
-private val model3 =
-    CartesianChartModel(
-        LineCartesianLayerModel.build {
-            series(1, 2, 3, 4, 5)
-            series(1, 3, 1, 2, 3)
-        }
-    )
-
-@Preview("Line Chart Dark", widthDp = 200)
-@Composable
-fun LineChartDark() {
-    Surface(shape = RoundedCornerShape(8.dp), color = Color.Gray) {
-        val blue = Color.Cyan
-        val red = Color.Red
-
-        val label =
-            rememberAxisLabelComponent(
-                textSize = MaterialTheme.typography.bodyMedium.fontSize,
-                padding = Dimensions.of(horizontal = 2.dp, vertical = 8.dp),
-                margins = Dimensions.of(horizontal = 4.dp, vertical = 4.dp),
-            )
-
-        CartesianChartHost(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxSize(),
-            chart =
-            rememberCartesianChart(
-                rememberLineCartesianLayer(
-                    listOf(
-                        rememberLineSpec(
-                            thickness = 4.dp,
-                            shader = DynamicShader.color(blue),
-                            backgroundShader =
-                            DynamicShader.verticalGradient(
-                                arrayOf(blue.copy(alpha = 0.5f), blue.copy(alpha = 0f))
-                            ),
-                        ),
-                        rememberLineSpec(
-                            thickness = 2.dp,
-                            cap = StrokeCap.Round,
-                            shader = DynamicShader.color(red),
-                            backgroundShader = null
-                        ),
-                    ),
-                    axisValueOverrider = AxisValueOverrider.fixed(maxY = 4f),
-                ),
-                startAxis =
-                rememberStartAxis(
-                    horizontalLabelPosition = VerticalAxis.HorizontalLabelPosition.Inside,
-                    label = label,
-                ),
-                endAxis =
-                rememberEndAxis(
-                    horizontalLabelPosition = VerticalAxis.HorizontalLabelPosition.Inside,
-                    guideline = null,
-                    label = label,
-                ),
-            ),
-            model = model3,
-        )
-    }
-}
-

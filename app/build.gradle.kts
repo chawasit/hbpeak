@@ -133,6 +133,8 @@ dependencies {
     implementation(libs.vico.compose.m3)
     implementation(libs.vico.core)
     implementation(libs.vico.views)
+
+    implementation(libs.mpandroidchart)
 }
 
 kapt {

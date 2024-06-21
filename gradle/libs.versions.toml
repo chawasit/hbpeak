@@ -14,6 +14,7 @@ kotlinxCoroutinesCore = "1.8.1"
 ktorServerCore = "2.3.11"
 lifecycleViewmodelCompose = "2.8.2"
 material = "1.12.0"
+mpandroidchart = "v3.1.0"
 runtimeAndroid = "1.6.8"
 foundationAndroid = "1.6.8"
 material3Android = "1.2.1"
@@ -59,21 +60,16 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 # For Jetpack Compose.
+mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
 vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
-
 # For `compose`. Creates a `ChartStyle` based on an M2 Material Theme.
 vico-compose-m2 = { group = "com.patrykandpatrick.vico", name = "compose-m2", version.ref = "vico" }
-
 # For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
-
 # Houses the core logic for charts and other elements. Included in all other modules.
 vico-core = { group = "com.patrykandpatrick.vico", name = "core", version.ref = "vico" }
-
 # For the view system.
 vico-views = { group = "com.patrykandpatrick.vico", name = "views", version.ref = "vico" }
-
-
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
