@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var webSocketServer: NettyApplicationEngine
     private var serialPort: UsbSerialPort? = null
     private val coroutineScope = CoroutineScope(Dispatchers.IO + Job())
-    private var machineState by mutableStateOf(MachineState())
+    private val machineState = mutableStateOf(MachineState())
     private val commandQueue = ArrayDeque<String>()
     private var isSending = false
     private var serialReadBuffer = StringBuilder()
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Initialize WebSocket server
-        webSocketServer = WebSocketServer(machineState, ::enqueueCommand).create()
+        webSocketServer = WebSocketServer(machineState, coroutineScope, ::enqueueCommand).create()
         webSocketServer.start()
 
         // Initialize Serial connection
@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
             val driver = preferDriver
             val connection = usbManager.openDevice(driver.device)
             if (connection == null) {
-                println("Connection is null")
+                Log.e("SerialProcessor","Connection is null")
                 return
             }
 
@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             val usbIoManager = SerialInputOutputManager(serialPort, serialListener)
             Executors.newSingleThreadExecutor().submit(usbIoManager)
         } else {
-            println("No available drivers")
+            Log.e("SerialProcessor","No Available Driver")
         }
     }
 
@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onRunError(e: Exception) {
-            println("Serial Error: ${e.message}")
+            Log.e("SerialProcessor","Serial Error: ${e.message}")
         }
     }
 
@@ -140,8 +140,8 @@ class MainActivity : AppCompatActivity() {
             if (endIndex != -1) {
                 val message = serialReadBuffer.substring(0, endIndex)
                 serialReadBuffer.delete(0, endIndex + 1)
-                println("Received: $message")
-                machineState = MachineStateInterpreter.interpretMessage(machineState, message)
+                Log.d("SerialProcessor","Received: $message")
+                machineState.value = MachineStateInterpreter.interpretMessage(machineState.value, message)
             }
         }
         isSerialProcessing = false

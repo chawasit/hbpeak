@@ -36,24 +36,18 @@ object MachineMessageTypes {
 }
 
 val websocketNameMapping = mapOf(
-    "preheat_temperature" to MachineControlUnitIds.PREHEAT_TEMPERATURE,
-    "gas_level" to MachineControlUnitIds.GAS_LEVEL,
-    "drum_rpm" to MachineControlUnitIds.DRUM_RPM,
-    "fan_level" to MachineControlUnitIds.FAN_LEVEL,
-    "cooling_tray_fan" to MachineControlUnitIds.COOLING_TRAY_FAN,
-    "cooling_tray_stir" to MachineControlUnitIds.COOLING_TRAY_STIR,
-    "bean_holder" to MachineControlUnitIds.BEAN_HOLDER,
-    "drum_door" to MachineControlUnitIds.DRUM_DOOR,
-    "drop_door" to MachineControlUnitIds.DROP_DOOR,
-    "loader" to MachineControlUnitIds.LOADER,
-    "destoner" to MachineControlUnitIds.DESTONER,
-    "exhaust_filter" to MachineControlUnitIds.EXHAUST_FILTER,
-    "bean_temperature" to MachineControlUnitIds.BEAN_TEMPERATURE,
-    "exhaust_temperature" to MachineControlUnitIds.EXHAUST_TEMPERATURE,
-    "air_inlet_temperature" to MachineControlUnitIds.AIR_INLET_TEMPERATURE,
-    "drum_temperature" to MachineControlUnitIds.DRUM_TEMPERATURE,
-    "air_pressure" to MachineControlUnitIds.AIR_PRESSURE,
-    "gas_pressure" to MachineControlUnitIds.GAS_PRESSURE,
-    "power_on" to MachineControlUnitIds.POWER_ON,
-    "hmi_relay" to MachineControlUnitIds.HMI_RELAY
+    "PreheatTemperature" to MachineControlUnitIds.PREHEAT_TEMPERATURE,
+    "GasLevel" to MachineControlUnitIds.GAS_LEVEL,
+    "DrumRPM" to MachineControlUnitIds.DRUM_RPM,
+    "FanLevel" to MachineControlUnitIds.FAN_LEVEL,
+    "CoolingTrayFan" to MachineControlUnitIds.COOLING_TRAY_FAN,
+    "CoolingTrayStir" to MachineControlUnitIds.COOLING_TRAY_STIR,
+    "BeanHolder" to MachineControlUnitIds.BEAN_HOLDER,
+    "DrumDoor" to MachineControlUnitIds.DRUM_DOOR,
+    "DropDoor" to MachineControlUnitIds.DROP_DOOR,
+    "Loader" to MachineControlUnitIds.LOADER,
+    "Destoner" to MachineControlUnitIds.DESTONER,
+    "ExhaustFilter" to MachineControlUnitIds.EXHAUST_FILTER,
+    "PowerOn" to MachineControlUnitIds.POWER_ON,
+    "HMIRelay" to MachineControlUnitIds.HMI_RELAY
 )

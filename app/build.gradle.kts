@@ -127,6 +127,12 @@ dependencies {
     implementation (libs.ktor.server.netty)
     implementation (libs.ktor.server.websockets)
     implementation (libs.ktor.client.serialization)
+
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m2)
+    implementation(libs.vico.compose.m3)
+    implementation(libs.vico.core)
+    implementation(libs.vico.views)
 }
 
 kapt {

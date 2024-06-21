@@ -1,6 +1,7 @@
 package coffee.hh.hbpeak
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,7 +33,7 @@ object Destinations {
 
 @Composable
 fun HBPeakNavHost(
-    machineState: MachineState,
+    machineState: MutableState<MachineState>,
     enqueueCommand: (String) -> Unit,
     navController: NavHostController = rememberNavController(),
 ) {

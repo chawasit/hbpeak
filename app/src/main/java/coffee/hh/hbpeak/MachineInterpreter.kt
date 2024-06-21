@@ -27,7 +27,7 @@ object MachineStateInterpreter {
                         )
 
                         MachineControlUnitIds.GAS_LEVEL -> newState.copy(
-                            gasLevel = value.toFloat(),
+                            gasLevel = value.toInt() / 10,
                             gasOnStatus = machineStatusToBoolean(status)
                         )
 
@@ -260,7 +260,10 @@ object MachineStateInterpreter {
             mapOf(
                 "t" to target,
                 "s" to status,
-                "v" to value
+                "v" to when (target) {
+                    MachineControlUnitIds.GAS_LEVEL -> value * 10
+                    else -> value
+                }
             )
         )
         val command = mapOf(

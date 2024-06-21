@@ -1,8 +1,10 @@
 package coffee.hh.hbpeak.composable
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -12,125 +14,127 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlin.math.max
+import kotlin.math.min
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(widthDp = 1000, heightDp = 1480)
 @Composable
 fun NumberPadDialog(
-    initialValue: String,
+    initialValue: String = "999",
     title: String = "Enter Value",
-    minValue: Int? = null,
-    maxValue: Int? = null,
-    showTurnOff: Boolean = false,
-    onDismissRequest: () -> Unit,
-    onValueConfirm: (String) -> Unit,
-    onTurnOff: (() -> Unit)? = null
+    minValue: Int = 0,
+    maxValue: Int = 100,
+    showTurnOff: Boolean = true,
+    onDismissRequest: () -> Unit = {},
+    onValueConfirm: (String) -> Unit = {},
+    onTurnOff: (() -> Unit)? = {}
 ) {
-    var value by remember { mutableStateOf(initialValue) }
+    var value: String by remember { mutableStateOf(initialValue) }
     val hasError = remember { mutableStateOf(false) }
 
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text(title) },
-        text = {
-            Box(modifier = Modifier.padding(8.dp), contentAlignment = Alignment.Center) {
+    val handleOnDigitClick = fun(digit: String) {
+        if (digit == "DEL") {
+            if (value.isNotEmpty()) {
+                value = value.dropLast(1)
+            }
+        } else if (digit == "CLR") {
+            value = ""
+        } else if (digit == "-10" || digit == "-1" || digit == "+1" || digit == "+10") {
+            value.toIntOrNull()?.let { min(max(it - digit.toInt(), minValue), maxValue) }.toString()
+        } else if (value.length < 3 && value.toIntOrNull() != null) {
+            value += digit
+        } else {
+            value += digit
+        }
+    }
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+    BasicAlertDialog(
+        onDismissRequest = onDismissRequest,
+    ) {
+        Card {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(24.dp)
+            ) {
+
+                Text(
+                    title,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
+                    NumberButton("-1", onClick = handleOnDigitClick, size = 86.dp)
+                    NumberButton("-10", onClick = handleOnDigitClick, size = 86.dp)
                     Text(
                         value,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .sizeIn(minHeight = 48.dp),
-                        fontSize = 36.sp,
+                            .width(140.dp)
+                            .height(48.dp),
+                        style = MaterialTheme.typography.displayMedium,
                         textAlign = TextAlign.Center
                     )
-
-                    Text(
-                        text = "Value must be between $minValue and $maxValue",
-                        color = if (hasError.value)
-                            MaterialTheme.colorScheme.error
-                        else
-                            MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        fontSize = 18.sp
-                    )
-
-                    NumberPad(
-                        onDigitClick = { digit ->
-                            if (digit == "DEL") {
-                                if (value.isNotEmpty()) {
-                                    value = value.dropLast(1)
-                                }
-                            } else if (digit == "CLR") {
-                                value = ""
-                            } else {
-                                value += digit
-                            }
-
-                            value = value.toIntOrNull()?.toString() ?: "0"
-                            if (value.isNotEmpty()) {
-                                val intValue = value.toIntOrNull()
-                                if ((minValue != null && intValue != null && intValue < minValue) ||
-                                    (maxValue != null && intValue != null && intValue > maxValue)
-                                ) {
-                                    hasError.value = true
-                                } else {
-                                    hasError.value = false
-                                }
-                            }
-                        }
-                    )
+                    NumberButton("+1", onClick = handleOnDigitClick, size = 86.dp)
+                    NumberButton("+10", onClick = handleOnDigitClick, size = 86.dp)
                 }
-            }
-        },
-        confirmButton = {
-            Button(onClick = {
-                if (value.isNotEmpty() && !hasError.value) {
-                    onValueConfirm(value)
-                    onDismissRequest()
-                }
-            }) {
+
                 Text(
-                    "OK",
-                    Modifier
-                        .padding(horizontal = 8.dp)
-                        .height(32.dp),
-                    fontSize = 24.sp
+                    text = "Value must be between $minValue and $maxValue",
+                    color = if (hasError.value)
+                        MaterialTheme.colorScheme.error
+                    else
+                        MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    fontSize = 18.sp
                 )
-            }
-        },
-        dismissButton = {
-            Row {
-                if (showTurnOff && onTurnOff != null) {
-                    FilledTonalButton(onClick = {
-                        onTurnOff()
-                        onDismissRequest()
-                    }) {
+
+                NumberPad(onDigitClick = handleOnDigitClick)
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    if (showTurnOff && onTurnOff != null) {
+                        FilledTonalButton(onClick = {
+                            onTurnOff()
+                            onDismissRequest()
+                        }, modifier = Modifier.width(240.dp)) {
+                            Text(
+                                "Turn Off",
+                                Modifier
+                                    .padding(horizontal = 8.dp)
+                                    .height(32.dp),
+                                style = MaterialTheme.typography.headlineMedium
+                            )
+                        }
+                    }
+
+                    Button(onClick = {
+                        if (value.isNotEmpty() && !hasError.value) {
+                            onValueConfirm(value)
+                            onDismissRequest()
+                        }
+                    }, modifier = Modifier.width(240.dp)) {
                         Text(
-                            "Turn Off",
+                            "OK",
                             Modifier
                                 .padding(horizontal = 8.dp)
                                 .height(32.dp),
-                            fontSize = 24.sp
+                            style = MaterialTheme.typography.headlineMedium
                         )
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-                OutlinedButton(onClick = onDismissRequest) {
-                    Text(
-                        "Cancel",
-                        Modifier
-                            .padding(horizontal = 8.dp)
-                            .height(32.dp),
-                        fontSize = 24.sp
-                    )
                 }
             }
         }
-    )
+    }
 }
 
 @Composable
@@ -168,13 +172,13 @@ fun NumberPad(onDigitClick: (String) -> Unit) {
 }
 
 @Composable
-fun NumberButton(text: String, onClick: (String) -> Unit) {
+fun NumberButton(text: String, onClick: (String) -> Unit, size: Dp = 96.dp) {
     OutlinedButton(
         onClick = { onClick(text) },
         modifier = Modifier
-            .size(96.dp)
+            .size(size)
             .aspectRatio(1f)
     ) {
-        Text(text, fontSize = 24.sp)
+        Text(text, style = MaterialTheme.typography.titleLarge)
     }
 }

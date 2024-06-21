@@ -4,7 +4,7 @@ data class MachineState(
     val preheatTemperatureOnStatus: Boolean = false,
     val preheatTemperature: Float = 0.0f,
     val gasOnStatus: Boolean = false,
-    val gasLevel: Float = 0.0f,
+    val gasLevel: Int = 0,
     val drumRpm: Int = 0,
     val drumOnStatus: Boolean = false,
     val fanLevel: Int = 0,
