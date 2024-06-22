@@ -1,18 +1,18 @@
 package coffee.hh.hbpeak.roasting
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -30,9 +30,9 @@ import coffee.hh.hbpeak.MachineStateInterpreter
 import coffee.hh.hbpeak.MachineStatus
 import coffee.hh.hbpeak.composable.NumberPadDialog
 import coffee.hh.hbpeak.composable.SwitchWithLabel
+import coffee.hh.hbpeak.theme.HBPeakTheme
 import kotlinx.coroutines.launch
 
-@Preview(widthDp = 1000, heightDp = 1480, showBackground = true, apiLevel = 34)
 @Composable
 fun RoastingContent(
     machineState: MutableState<MachineState> = mutableStateOf(MachineState()),
@@ -174,7 +174,8 @@ fun RoastingContent(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Column {
+        Column(modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -184,154 +185,222 @@ fun RoastingContent(
                 RoastingGraph(machineState)
             }
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Min)
-                    .background(Color.Yellow)
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(4),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Text("Info Box")
+                item {
+                    RoastingTemperatureWidget(
+                        "Bean",
+                        machineState.value.beanTemperature,
+                        machineState.value.beanTemperatureRor
+                    )
+                }
+
+                item {
+                    RoastingTemperatureWidget(
+                        "Drum",
+                        machineState.value.drumTemperature,
+                        machineState.value.drumTemperatureRor
+                    )
+                }
+
+                item {
+                    RoastingTemperatureWidget(
+                        "Inlet",
+                        machineState.value.airInletTemperature,
+                        machineState.value.airInletTemperatureRor
+                    )
+                }
+
+                item {
+                    RoastingTemperatureWidget(
+                        "Exhaust",
+                        machineState.value.exhaustTemperature,
+                        machineState.value.exhaustTemperatureRor
+                    )
+                }
             }
 
-            Box(
+
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(IntrinsicSize.Min)
-                    .background(Color.Green)
             ) {
-                Text("Event Box")
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text("Event", style = MaterialTheme.typography.headlineSmall)
+
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(4),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    ) {
+                        item {
+                            SwitchWithLabel(
+                                label = "Yellow",
+                                state = false,
+                            )
+                        }
+
+                        item {
+                            SwitchWithLabel(
+                                label = "First Crack",
+                                state = false,
+                            )
+                        }
+
+                        item {
+                            SwitchWithLabel(
+                                label = "Second Crack",
+                                state = false,
+                            )
+                        }
+                    }
+                }
             }
 
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
             ) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(4),
-                    modifier = Modifier.padding(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(16.dp)
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    item {
-                        SwitchWithLabel(
-                            label = "Preheat: ${machineState.value.preheatTemperature}",
-                            state = machineState.value.preheatTemperatureOnStatus,
-                            onStateChange = {
-                                currentField.value = "Preheat Temperature"
-                                currentValue.value =
-                                    machineState.value.preheatTemperature.toInt().toString()
-                                showDialog.value = true
-                                showTurnOffButton.value = true
-                                minValue.intValue = 0
-                                maxValue.intValue = 300
-                            },
-                        )
-                    }
-                    item {
-                        SwitchWithLabel(
-                            label = "Gas Level: ${machineState.value.gasLevel}",
-                            state = machineState.value.gasOnStatus,
-                            onStateChange = {
-                                currentField.value = "Gas Level"
-                                currentValue.value = machineState.value.gasLevel.toString()
-                                showDialog.value = true
-                                showTurnOffButton.value = true
-                                minValue.intValue = 0
-                                maxValue.intValue = 99
-                            })
-                    }
-                    item {
-                        SwitchWithLabel(
-                            label = "Air: ${machineState.value.fanLevel}",
-                            state = machineState.value.fanOnStatus,
-                            onStateChange = {
-                                currentField.value = "Air Speed"
-                                currentValue.value = machineState.value.fanLevel.toString()
-                                showDialog.value = true
-                                showTurnOffButton.value = false
-                                minValue.intValue = 30
-                                maxValue.intValue = 100
-                            })
+                    Text("Control", style = MaterialTheme.typography.headlineSmall)
 
-                    }
-                    item {
-                        SwitchWithLabel(
-                            label = "Drum RPM: ${machineState.value.drumRpm}",
-                            state = machineState.value.drumOnStatus,
-                            onStateChange = {
-                                currentField.value = "Drum RPM"
-                                currentValue.value = machineState.value.drumRpm.toString()
-                                showDialog.value = true
-                                showTurnOffButton.value = false
-                                minValue.intValue = 20
-                                maxValue.intValue = 79
-                            })
-                    }
-                    item {
-                        SwitchWithLabel(
-                            label = "Drum Door",
-                            state = machineState.value.drumDoorOpenStatus,
-                            onStateChange = {
-                                coroutineScope.launch {
-                                    val command = MachineStateInterpreter.generateControlCommand(
-                                        machineState.value,
-                                        MachineControlUnitIds.DRUM_DOOR,
-                                        if (it) MachineStatus.ON else MachineStatus.OFF,
-                                        0
-                                    )
-                                    enqueueCommand(command)
-                                }
-                            })
-                    }
-                    item {
-                        SwitchWithLabel(
-                            label = "Bean Holder",
-                            state = machineState.value.beanHolderOpenStatus,
-                            onStateChange = {
-                                coroutineScope.launch {
-                                    val command = MachineStateInterpreter.generateControlCommand(
-                                        machineState.value,
-                                        MachineControlUnitIds.BEAN_HOLDER,
-                                        if (it) MachineStatus.ON else MachineStatus.OFF,
-                                        0
-                                    )
-                                    enqueueCommand(command)
-                                }
-                            })
-                    }
-                    item {
-                        SwitchWithLabel(
-                            label = "Cooling Tray Fan",
-                            state = machineState.value.coolingTrayFanRunningStatus,
-                            onStateChange = {
-                                coroutineScope.launch {
-                                    val command = MachineStateInterpreter.generateControlCommand(
-                                        machineState.value,
-                                        MachineControlUnitIds.COOLING_TRAY_FAN,
-                                        if (it) MachineStatus.ON else MachineStatus.OFF,
-                                        0
-                                    )
-                                    enqueueCommand(command)
-                                }
-                            })
-                    }
-                    item {
-                        SwitchWithLabel(
-                            label = "Cooling Tray Stir",
-                            state = machineState.value.coolingTrayStirRunningStatus,
-                            onStateChange = {
-                                coroutineScope.launch {
-                                    val command = MachineStateInterpreter.generateControlCommand(
-                                        machineState.value,
-                                        MachineControlUnitIds.COOLING_TRAY_STIR,
-                                        if (it) MachineStatus.ON else MachineStatus.OFF,
-                                        0
-                                    )
-                                    enqueueCommand(command)
-                                }
-                            })
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(4),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    ) {
+                        item {
+                            SwitchWithLabel(
+                                label = "Preheat: ${machineState.value.preheatTemperature}",
+                                state = machineState.value.preheatTemperatureOnStatus,
+                                onStateChange = {
+                                    currentField.value = "Preheat Temperature"
+                                    currentValue.value =
+                                        machineState.value.preheatTemperature.toInt().toString()
+                                    showDialog.value = true
+                                    showTurnOffButton.value = true
+                                    minValue.intValue = 0
+                                    maxValue.intValue = 300
+                                },
+                            )
+                        }
+                        item {
+                            SwitchWithLabel(
+                                label = "Gas: ${machineState.value.gasLevel}",
+                                state = machineState.value.gasOnStatus,
+                                onStateChange = {
+                                    currentField.value = "Gas Level"
+                                    currentValue.value = machineState.value.gasLevel.toString()
+                                    showDialog.value = true
+                                    showTurnOffButton.value = true
+                                    minValue.intValue = 0
+                                    maxValue.intValue = 99
+                                })
+                        }
+                        item {
+                            SwitchWithLabel(
+                                label = "Air: ${machineState.value.fanLevel} (${machineState.value.airPressure}Pa)",
+                                state = machineState.value.fanOnStatus,
+                                onStateChange = {
+                                    currentField.value = "Air Speed"
+                                    currentValue.value = machineState.value.fanLevel.toString()
+                                    showDialog.value = true
+                                    showTurnOffButton.value = false
+                                    minValue.intValue = 30
+                                    maxValue.intValue = 100
+                                })
+
+                        }
+                        item {
+                            SwitchWithLabel(
+                                label = "Drum RPM: ${machineState.value.drumRpm}",
+                                state = machineState.value.drumOnStatus,
+                                onStateChange = {
+                                    currentField.value = "Drum RPM"
+                                    currentValue.value = machineState.value.drumRpm.toString()
+                                    showDialog.value = true
+                                    showTurnOffButton.value = false
+                                    minValue.intValue = 20
+                                    maxValue.intValue = 79
+                                })
+                        }
+                        item {
+                            SwitchWithLabel(
+                                label = "Drum Door",
+                                state = machineState.value.drumDoorOpenStatus,
+                                onStateChange = {
+                                    coroutineScope.launch {
+                                        val command =
+                                            MachineStateInterpreter.generateControlCommand(
+                                                machineState.value,
+                                                MachineControlUnitIds.DRUM_DOOR,
+                                                if (it) MachineStatus.ON else MachineStatus.OFF,
+                                                0
+                                            )
+                                        enqueueCommand(command)
+                                    }
+                                })
+                        }
+                        item {
+                            SwitchWithLabel(
+                                label = "Bean Holder",
+                                state = machineState.value.beanHolderOpenStatus,
+                                onStateChange = {
+                                    coroutineScope.launch {
+                                        val command =
+                                            MachineStateInterpreter.generateControlCommand(
+                                                machineState.value,
+                                                MachineControlUnitIds.BEAN_HOLDER,
+                                                if (it) MachineStatus.ON else MachineStatus.OFF,
+                                                0
+                                            )
+                                        enqueueCommand(command)
+                                    }
+                                })
+                        }
+                        item {
+                            SwitchWithLabel(
+                                label = "Cooling Fan",
+                                state = machineState.value.coolingTrayFanRunningStatus,
+                                onStateChange = {
+                                    coroutineScope.launch {
+                                        val command =
+                                            MachineStateInterpreter.generateControlCommand(
+                                                machineState.value,
+                                                MachineControlUnitIds.COOLING_TRAY_FAN,
+                                                if (it) MachineStatus.ON else MachineStatus.OFF,
+                                                0
+                                            )
+                                        enqueueCommand(command)
+                                    }
+                                })
+                        }
+                        item {
+                            SwitchWithLabel(
+                                label = "Cooling Stir",
+                                state = machineState.value.coolingTrayStirRunningStatus,
+                                onStateChange = {
+                                    coroutineScope.launch {
+                                        val command =
+                                            MachineStateInterpreter.generateControlCommand(
+                                                machineState.value,
+                                                MachineControlUnitIds.COOLING_TRAY_STIR,
+                                                if (it) MachineStatus.ON else MachineStatus.OFF,
+                                                0
+                                            )
+                                        enqueueCommand(command)
+                                    }
+                                })
+                        }
                     }
                 }
             }
@@ -342,4 +411,13 @@ fun RoastingContent(
 @Composable
 fun RoastingGraph(machineState: MutableState<MachineState>) {
 
+}
+
+@Preview(name = "Roasting light theme", widthDp = 1200, heightDp = 1920, showBackground = true, apiLevel = 34, uiMode = UI_MODE_NIGHT_NO)
+@Preview(name = "Roasting dark theme", widthDp = 1200, heightDp = 1920, showBackground = true, apiLevel = 34, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun RoastingContentPreview() {
+    HBPeakTheme {
+        RoastingContent()
+    }
 }

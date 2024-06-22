@@ -49,7 +49,7 @@ fun SwitchWithLabel(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = label, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.width(
+        Text(text = label, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.width(
             IntrinsicSize.Max))
         Spacer(modifier = Modifier.padding(start = 8.dp))
         Switch(

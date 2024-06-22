@@ -50,7 +50,8 @@ fun NumberPadDialog(
                 (value.length == 1 && value == "0")
                 || value.length == maxValue.toString().length
                 || value.toInt() > maxValue
-                || value.toInt() < minValue
+                || (value.length >= minValue.toString().length && value.toInt() < minValue)
+                || ((value + digit).toInt() > maxValue || (value + digit).length > maxValue.toString().length)
             ) {
                 value = digit
             } else {
@@ -108,7 +109,7 @@ fun NumberPadDialog(
 
                 NumberPad(onDigitClick = handleOnDigitClick)
                 Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     if (showTurnOff && onTurnOff != null) {
