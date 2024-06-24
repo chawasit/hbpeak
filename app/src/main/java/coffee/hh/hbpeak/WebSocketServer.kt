@@ -18,7 +18,6 @@ import io.ktor.websocket.DefaultWebSocketSession
 import io.ktor.websocket.Frame
 import io.ktor.websocket.readText
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -115,7 +114,7 @@ class WebSocketServer(
             val command = MachineStateInterpreter.generateControlCommand(
                 machineState.value,
                 websocketNameMapping[nodeName]!!,
-                if (requestValue > 0) MachineStatus.ON else MachineStatus.OFF,
+                if (requestValue > 0) MachineNodeStatus.ON else MachineNodeStatus.OFF,
                 requestValue
             )
             coroutineScope.launch {

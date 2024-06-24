@@ -37,4 +37,11 @@ data class MachineState(
     val hmiRelayStatus: Boolean = false,
     val hasNewError: Boolean = false,
     val errorMessages: List<String> = emptyList(),
+    val status: MachineStatus = MachineStatus.IDLE
 )
+
+enum class MachineStatus {
+    IDLE,
+    ROASTING
+}
+

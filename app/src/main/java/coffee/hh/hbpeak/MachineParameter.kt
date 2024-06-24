@@ -23,7 +23,7 @@ object MachineControlUnitIds {
     const val HMI_RELAY = 227
 }
 
-object MachineStatus {
+object MachineNodeStatus {
     const val OFF = "f"
     const val ON = "o"
 }

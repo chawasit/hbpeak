@@ -18,7 +18,7 @@ object MachineStateInterpreter {
                     for (i in 0 until params.length()) {
                         val param = params.getJSONObject(i)
                         val target = param.getInt("t")
-                        val status = param.optString("s", MachineStatus.OFF)
+                        val status = param.optString("s", MachineNodeStatus.OFF)
                         val value = param.optDouble("v", Double.NaN)
                         val rateOfRise = param.optDouble("r", Double.NaN)
 
@@ -313,6 +313,6 @@ object MachineStateInterpreter {
     }
 
     private fun machineStatusToBoolean(status: String): Boolean {
-        return status == MachineStatus.ON
+        return status == MachineNodeStatus.ON
     }
 }

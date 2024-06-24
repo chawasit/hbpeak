@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import coffee.hh.hbpeak.MachineControlUnitIds
 import coffee.hh.hbpeak.MachineState
 import coffee.hh.hbpeak.MachineStateInterpreter
-import coffee.hh.hbpeak.MachineStatus
+import coffee.hh.hbpeak.MachineNodeStatus
 import coffee.hh.hbpeak.composable.NumberPadDialog
 import coffee.hh.hbpeak.composable.SwitchWithLabel
 import coffee.hh.hbpeak.theme.HBPeakTheme
@@ -62,7 +62,7 @@ fun RoastingContent(
                                 val command = MachineStateInterpreter.generateControlCommand(
                                     machineState.value,
                                     MachineControlUnitIds.DRUM_RPM,
-                                    if (value.toInt() == 0) MachineStatus.OFF else MachineStatus.ON,
+                                    if (value.toInt() == 0) MachineNodeStatus.OFF else MachineNodeStatus.ON,
                                     value.toInt()
                                 )
                                 enqueueCommand(command)
@@ -74,7 +74,7 @@ fun RoastingContent(
                                 val command = MachineStateInterpreter.generateControlCommand(
                                     machineState.value,
                                     MachineControlUnitIds.FAN_LEVEL,
-                                    if (value.toInt() == 0) MachineStatus.OFF else MachineStatus.ON,
+                                    if (value.toInt() == 0) MachineNodeStatus.OFF else MachineNodeStatus.ON,
                                     value.toInt()
                                 )
                                 enqueueCommand(command)
@@ -86,7 +86,7 @@ fun RoastingContent(
                                 val command = MachineStateInterpreter.generateControlCommand(
                                     machineState.value,
                                     MachineControlUnitIds.PREHEAT_TEMPERATURE,
-                                    if (value.toInt() == 0) MachineStatus.OFF else MachineStatus.ON,
+                                    if (value.toInt() == 0) MachineNodeStatus.OFF else MachineNodeStatus.ON,
                                     value.toInt()
                                 )
                                 enqueueCommand(command)
@@ -98,7 +98,7 @@ fun RoastingContent(
                                 val command = MachineStateInterpreter.generateControlCommand(
                                     machineState.value,
                                     MachineControlUnitIds.GAS_LEVEL,
-                                    if (value.toInt() == 0) MachineStatus.OFF else MachineStatus.ON,
+                                    if (value.toInt() == 0) MachineNodeStatus.OFF else MachineNodeStatus.ON,
                                     value.toInt()
                                 )
                                 enqueueCommand(command)
@@ -114,7 +114,7 @@ fun RoastingContent(
                                 val command = MachineStateInterpreter.generateControlCommand(
                                     machineState.value,
                                     MachineControlUnitIds.DRUM_RPM,
-                                    MachineStatus.OFF,
+                                    MachineNodeStatus.OFF,
                                     0
                                 )
                                 enqueueCommand(command)
@@ -126,7 +126,7 @@ fun RoastingContent(
                                 val command = MachineStateInterpreter.generateControlCommand(
                                     machineState.value,
                                     MachineControlUnitIds.FAN_LEVEL,
-                                    MachineStatus.OFF,
+                                    MachineNodeStatus.OFF,
                                     0
                                 )
                                 enqueueCommand(command)
@@ -139,7 +139,7 @@ fun RoastingContent(
                                     MachineStateInterpreter.generateControlCommand(
                                         machineState.value,
                                         MachineControlUnitIds.PREHEAT_TEMPERATURE,
-                                        MachineStatus.OFF,
+                                        MachineNodeStatus.OFF,
                                         0
                                     )
 
@@ -147,7 +147,7 @@ fun RoastingContent(
                                     MachineStateInterpreter.generateControlCommand(
                                         machineState.value,
                                         MachineControlUnitIds.GAS_LEVEL,
-                                        MachineStatus.OFF,
+                                        MachineNodeStatus.OFF,
                                         0
                                     )
                                 enqueueCommand(offPreheatCommand)
@@ -160,7 +160,7 @@ fun RoastingContent(
                                 val command = MachineStateInterpreter.generateControlCommand(
                                     machineState.value,
                                     MachineControlUnitIds.GAS_LEVEL,
-                                    MachineStatus.OFF,
+                                    MachineNodeStatus.OFF,
                                     0
                                 )
                                 enqueueCommand(command)
@@ -180,7 +180,6 @@ fun RoastingContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(2f)
-                    .background(Color.Red)
             ) {
                 RoastingGraph(machineState)
             }
@@ -347,7 +346,7 @@ fun RoastingContent(
                                             MachineStateInterpreter.generateControlCommand(
                                                 machineState.value,
                                                 MachineControlUnitIds.DRUM_DOOR,
-                                                if (it) MachineStatus.ON else MachineStatus.OFF,
+                                                if (it) MachineNodeStatus.ON else MachineNodeStatus.OFF,
                                                 0
                                             )
                                         enqueueCommand(command)
@@ -364,7 +363,7 @@ fun RoastingContent(
                                             MachineStateInterpreter.generateControlCommand(
                                                 machineState.value,
                                                 MachineControlUnitIds.BEAN_HOLDER,
-                                                if (it) MachineStatus.ON else MachineStatus.OFF,
+                                                if (it) MachineNodeStatus.ON else MachineNodeStatus.OFF,
                                                 0
                                             )
                                         enqueueCommand(command)
@@ -381,7 +380,7 @@ fun RoastingContent(
                                             MachineStateInterpreter.generateControlCommand(
                                                 machineState.value,
                                                 MachineControlUnitIds.COOLING_TRAY_FAN,
-                                                if (it) MachineStatus.ON else MachineStatus.OFF,
+                                                if (it) MachineNodeStatus.ON else MachineNodeStatus.OFF,
                                                 0
                                             )
                                         enqueueCommand(command)
@@ -398,7 +397,7 @@ fun RoastingContent(
                                             MachineStateInterpreter.generateControlCommand(
                                                 machineState.value,
                                                 MachineControlUnitIds.COOLING_TRAY_STIR,
-                                                if (it) MachineStatus.ON else MachineStatus.OFF,
+                                                if (it) MachineNodeStatus.ON else MachineNodeStatus.OFF,
                                                 0
                                             )
                                         enqueueCommand(command)
@@ -410,11 +409,6 @@ fun RoastingContent(
             }
         }
     }
-}
-
-@Composable
-fun RoastingGraph(machineState: MutableState<MachineState>) {
-
 }
 
 @Preview(name = "Roasting light theme", widthDp = 1200, heightDp = 1920, showBackground = true, apiLevel = 34, uiMode = UI_MODE_NIGHT_NO)
