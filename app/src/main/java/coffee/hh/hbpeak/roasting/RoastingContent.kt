@@ -280,7 +280,8 @@ fun RoastingContent(
                     ) {
                         item {
                             SwitchWithLabel(
-                                label = "Preheat: ${machineState.value.preheatTemperature}",
+                                label = "Preheat",
+                                value = "${machineState.value.preheatTemperature.toInt()} C",
                                 state = machineState.value.preheatTemperatureOnStatus,
                                 onStateChange = {
                                     currentField.value = "Preheat Temperature"
@@ -295,7 +296,8 @@ fun RoastingContent(
                         }
                         item {
                             SwitchWithLabel(
-                                label = "Gas: ${machineState.value.gasLevel}",
+                                label = "Gas",
+                                value = "${machineState.value.gasLevel} (${machineState.value.gasPressure} Pa)",
                                 state = machineState.value.gasOnStatus,
                                 onStateChange = {
                                     currentField.value = "Gas Level"
@@ -308,7 +310,8 @@ fun RoastingContent(
                         }
                         item {
                             SwitchWithLabel(
-                                label = "Air: ${machineState.value.fanLevel} (${machineState.value.airPressure}Pa)",
+                                label = "Air",
+                                value = "${machineState.value.fanLevel} (${machineState.value.airPressure} Pa)",
                                 state = machineState.value.fanOnStatus,
                                 onStateChange = {
                                     currentField.value = "Air Speed"
@@ -322,7 +325,8 @@ fun RoastingContent(
                         }
                         item {
                             SwitchWithLabel(
-                                label = "Drum RPM: ${machineState.value.drumRpm}",
+                                label = "Drum RPM",
+                                value = "${machineState.value.drumRpm}",
                                 state = machineState.value.drumOnStatus,
                                 onStateChange = {
                                     currentField.value = "Drum RPM"

@@ -16,6 +16,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,13 +54,14 @@ fun RoastingTemperatureWidget(
             }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = String.format("%5.1f", temperature),
-                    style = MaterialTheme.typography.headlineLarge,
+                    style = MaterialTheme.typography.displayMedium,
                     textAlign = TextAlign.End,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(2f)
                 )
                 Text(
                     text = "C.",
@@ -70,11 +72,12 @@ fun RoastingTemperatureWidget(
             }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = String.format("%4.1f", rateOfRise),
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = MaterialTheme.typography.displaySmall,
                     textAlign = TextAlign.End,
                     modifier = Modifier.weight(1f)
                 )

@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         startStatusRequestRoutine()
 
         setContent {
-            HBPeakTheme {
+            HBPeakTheme(darkTheme = true) {
                 HBPeakNavHost(machineState, ::enqueueCommand)
             }
         }

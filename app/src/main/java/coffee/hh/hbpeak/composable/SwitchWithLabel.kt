@@ -1,6 +1,5 @@
 package coffee.hh.hbpeak.composable
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -8,8 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -24,18 +21,21 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-@Preview()
+@Preview
 @Composable
 fun SwitchWithLabel(
+    modifier: Modifier = Modifier,
     label: String = "text",
+    value: String = "",
     state: Boolean = false,
     onStateChange: (Boolean) -> Unit = {},
-    modifier: Modifier = Modifier
 ) {
 
     val interactionSource = remember { MutableInteractionSource() }
     Row(
-        modifier = modifier.width(IntrinsicSize.Max).border(1.dp, Color.Gray, shape = MaterialTheme.shapes.medium)
+        modifier = modifier
+            .width(IntrinsicSize.Max)
+            .border(1.dp, Color.Gray, shape = MaterialTheme.shapes.medium)
             .clickable(
                 interactionSource = interactionSource,
                 // This is for removing ripple when Row is clicked
@@ -49,8 +49,19 @@ fun SwitchWithLabel(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = label, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.width(
-            IntrinsicSize.Max))
+        Text(
+            text = label, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.width(
+                IntrinsicSize.Max
+            )
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.width(
+                IntrinsicSize.Max
+            )
+        )
         Spacer(modifier = Modifier.padding(start = 8.dp))
         Switch(
             checked = state,
