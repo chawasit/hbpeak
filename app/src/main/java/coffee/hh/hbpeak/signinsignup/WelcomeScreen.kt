@@ -61,11 +61,11 @@ fun WelcomeScreen(
 ) {
     var showBranding by rememberSaveable { mutableStateOf(true) }
 
-    Scaffold(modifier = Modifier.supportWideScreen()) { innerPadding ->
+    Scaffold(modifier = Modifier) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxWidth()
+                .supportWideScreen()
                 .verticalScroll(rememberScrollState())
         ) {
             AnimatedVisibility(

@@ -1,22 +1,17 @@
 package coffee.hh.hbpeak.roasting
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coffee.hh.hbpeak.MachineState
 import coffee.hh.hbpeak.MachineStatus
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
-import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 data class SensorDataPoint(
     val beanTemperature: Float,
@@ -28,67 +23,74 @@ data class SensorDataPoint(
     val airInletTemperatureRor: Float,
     val exhaustTemperatureRor: Float
 )
+
 data class SensorDataFrame(
     val time: Float,
     val point: SensorDataPoint
 )
 
 class RoastingGraphViewModel : ViewModel() {
-    var machineState: MutableState<MachineState>? = null
-    private var startTimer = System.currentTimeMillis()
-    private val _graphData = MutableStateFlow<List<SensorDataFrame>>(listOf())
-    val graphData: StateFlow<List<SensorDataFrame>> = _graphData
-
+    private var _startTimer = System.currentTimeMillis()
+    private val _graphData: MutableStateFlow<List<SensorDataFrame>> = MutableStateFlow(listOf())
+    val graphData: StateFlow<List<SensorDataFrame>> = _graphData.asStateFlow()
 
     init {
-        startDataFetching()
+        print("Init RoastingGraphViewModel")
+        startTimer()
     }
 
-    fun startTimer () {
+    fun startTimer() {
         resetTimer()
     }
 
-    fun resetTimer () {
-        startTimer = System.currentTimeMillis()
+    fun elapseMinutes(currentTime: Long): Float {
+        return (currentTime - _startTimer) / 1000f / 60f
     }
 
-    private fun startDataFetching() {
-        viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                while (true) {
-                    val currentTime = System.currentTimeMillis()
-                    _graphData.value += SensorDataFrame(
-                        time = (currentTime - startTimer) / 1000f,
-                        point = SensorDataPoint(
-                            beanTemperature = machineState?.value?.beanTemperature!!,
-                            drumTemperature = machineState?.value?.drumTemperature!!,
-                            airInletTemperature = machineState?.value?.airInletTemperature!!,
-                            exhaustTemperature = machineState?.value?.exhaustTemperature!!,
-                            beanTemperatureRor = machineState?.value?.beanTemperatureRor!!,
-                            drumTemperatureRor = machineState?.value?.drumTemperatureRor!!,
-                            airInletTemperatureRor = machineState?.value?.airInletTemperatureRor!!,
-                            exhaustTemperatureRor = machineState?.value?.exhaustTemperatureRor!!
-                        )
-                    )
+    fun elapseMinutes(): Float {
+        val currentTime = System.currentTimeMillis()
+        return elapseMinutes(currentTime)
+    }
 
-                    when (machineState?.value?.status) {
-                        MachineStatus.IDLE -> {
+    fun resetTimer() {
+        _startTimer = System.currentTimeMillis()
+        _graphData.value = listOf()
+    }
 
-                        }
-                        MachineStatus.ROASTING -> {
+    fun dataFetching(machineState: MachineState) {
+        _graphData.update { current ->
+            val sensorDataFrames = current + SensorDataFrame(
+                time = elapseMinutes(),
+                point = SensorDataPoint(
+                    beanTemperature = machineState.beanTemperature,
+                    drumTemperature = machineState.drumTemperature,
+                    airInletTemperature = machineState.airInletTemperature,
+                    exhaustTemperature = machineState.exhaustTemperature,
+                    beanTemperatureRor = machineState.beanTemperatureRor,
+                    drumTemperatureRor = machineState.drumTemperatureRor,
+                    airInletTemperatureRor = machineState.airInletTemperatureRor,
+                    exhaustTemperatureRor = machineState.exhaustTemperatureRor
+                )
+            )
+            sensorDataFrames
+        }
 
-                        }
-                        null -> {
+        when (machineState.status) {
+            MachineStatus.IDLE -> {
 
-                        }
-                    }
-                    delay(500)
-                }
+            }
+
+            MachineStatus.ROASTING -> {
+
+            }
+
+            null -> {
+
             }
         }
     }
+}
 
-    private fun resetGraph() {
+private fun resetGraph() {
 
-    }
 }

@@ -1,5 +1,6 @@
 package coffee.hh.hbpeak.composable
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
@@ -12,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -67,7 +69,7 @@ fun NumberPadDialog(
     ) {
         Card {
             Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(24.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp), modifier = Modifier.padding(24.dp)
             ) {
 
                 Text(
@@ -108,9 +110,10 @@ fun NumberPadDialog(
                 )
 
                 NumberPad(onDigitClick = handleOnDigitClick)
+
                 Row(
                     horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
                 ) {
                     if (showTurnOff && onTurnOff != null) {
                         FilledTonalButton(onClick = {
@@ -155,24 +158,24 @@ fun NumberPad(onDigitClick: (String) -> Unit) {
             .fillMaxWidth(), contentAlignment = Alignment.Center
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 NumberButton("1", onDigitClick)
                 NumberButton("2", onDigitClick)
                 NumberButton("3", onDigitClick)
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 NumberButton("4", onDigitClick)
                 NumberButton("5", onDigitClick)
                 NumberButton("6", onDigitClick)
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 NumberButton("7", onDigitClick)
                 NumberButton("8", onDigitClick)
                 NumberButton("9", onDigitClick)
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 NumberButton("CLR", onDigitClick)
                 NumberButton("0", onDigitClick)
                 NumberButton("DEL", onDigitClick)
@@ -188,6 +191,9 @@ fun NumberButton(text: String, onClick: (String) -> Unit, size: Dp = 96.dp) {
         modifier = Modifier
             .size(size)
             .aspectRatio(1f)
+            .clip(MaterialTheme.shapes.large)
+            .background(MaterialTheme.colorScheme.surfaceBright)
+        , shape = MaterialTheme.shapes.large
     ) {
         Text(text, style = MaterialTheme.typography.titleLarge)
     }

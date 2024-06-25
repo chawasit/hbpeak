@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,6 +17,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,17 +32,19 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.toColor
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coffee.hh.hbpeak.MachineState
 import coffee.hh.hbpeak.theme.HBPeakTheme
-import com.google.android.material.color.MaterialColors
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-fun RoastingGraph(machineState: MutableState<MachineState> = mutableStateOf(MachineState())) {
-    val roastingGraphViewModel: RoastingGraphViewModel = viewModel()
+fun RoastingGraph(
+    machineState: MutableState<MachineState> = mutableStateOf(MachineState()),
+    roastingGraphViewModel: RoastingGraphViewModel = viewModel()
+) {
+    val coroutineScope = rememberCoroutineScope()
+
     val backgroundColor = MaterialTheme.colorScheme.surfaceBright
     val textColor = MaterialTheme.colorScheme.onSurface
     val lineColor = MaterialTheme.colorScheme.onSurface
@@ -57,6 +59,112 @@ fun RoastingGraph(machineState: MutableState<MachineState> = mutableStateOf(Mach
         )
     }
 
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            roastingGraphViewModel.resetTimer()
+            while (true) {
+                roastingGraphViewModel.dataFetching(machineState.value)
+                if (graphAppearance.value.xMax < roastingGraphViewModel.elapseMinutes()) {
+                    graphAppearance.value = graphAppearance.value.copy(xMax = roastingGraphViewModel.elapseMinutes().toInt() + 2)
+                }
+                delay(500)
+            }
+        }
+    }
+
+    val graphData = roastingGraphViewModel.graphData.collectAsState()
+
+    val beanTemperatureChartData = graphData.value.map { frame ->
+        PointF(
+            frame.time,
+            frame.point.beanTemperature
+        )
+    }
+
+    val drumTemperatureChartData = graphData.value.map { frame ->
+        PointF(
+            frame.time,
+            frame.point.drumTemperature
+        )
+    }
+
+    val airInletTemperatureChartData = graphData.value.map { frame ->
+        PointF(
+            frame.time,
+            frame.point.airInletTemperature
+        )
+    }
+
+    val exhaustTemperatureChartData = graphData.value.map { frame ->
+        PointF(
+            frame.time,
+            frame.point.exhaustTemperature
+        )
+    }
+
+    val beanTemperatureRorChartData = graphData.value.map { frame ->
+        PointF(
+            frame.time,
+            frame.point.beanTemperatureRor
+        )
+    }
+
+    val drumTemperatureRorChartData = graphData.value.map { frame ->
+        PointF(
+            frame.time,
+            frame.point.drumTemperatureRor
+        )
+    }
+
+    val airInletTemperatureRorChartData = graphData.value.map { frame ->
+        PointF(
+            frame.time,
+            frame.point.airInletTemperatureRor
+        )
+    }
+
+    val exhaustTemperatureRorChartData = graphData.value.map { frame ->
+        PointF(
+            frame.time,
+            frame.point.exhaustTemperatureRor
+        )
+    }
+
+    val chartData = listOf(
+        ChartData(
+            points = beanTemperatureChartData,
+            chartAppearance = ChartAppearance(color = Color.Blue)
+        ),
+        ChartData(
+            points = drumTemperatureChartData,
+            chartAppearance = ChartAppearance(color = Color.Green)
+        ),
+        ChartData(
+            points = airInletTemperatureChartData,
+            chartAppearance = ChartAppearance(color = Color.Red)
+        ),
+        ChartData(
+            points = exhaustTemperatureChartData,
+            chartAppearance = ChartAppearance(color = Color.Yellow)
+        ),
+        ChartData(
+            points = beanTemperatureRorChartData,
+            chartAppearance = ChartAppearance(color = Color.Blue.copy(alpha = 0.8f), onSecondAxis = true)
+        ),
+        ChartData(
+            points = drumTemperatureRorChartData,
+            chartAppearance = ChartAppearance(color = Color.Green.copy(alpha = 0.8f), onSecondAxis = true)
+        ),
+        ChartData(
+            points = airInletTemperatureRorChartData,
+            chartAppearance = ChartAppearance(color = Color.Red.copy(alpha = 0.8f), onSecondAxis = true)
+        ),
+        ChartData(
+            points = exhaustTemperatureRorChartData,
+            chartAppearance = ChartAppearance(color = Color.Yellow.copy(alpha = 0.8f), onSecondAxis = true)
+        )
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -64,20 +172,7 @@ fun RoastingGraph(machineState: MutableState<MachineState> = mutableStateOf(Mach
     ) {
         LineChart(
             modifier = Modifier,
-            chartData = listOf(
-                ChartData(
-                    points = listOf(
-                        PointF(0f, 40f),
-                        PointF(1f, 60f),
-                        PointF(2f, 90f),
-                        PointF(3f, 30f)
-                    ),
-                    chartAppearance = ChartAppearance(color = Color.Blue)
-                ), ChartData(
-                    points = (1 .. 60*12*30).map { PointF(it.toFloat()/(60*30).toFloat(), (20..100).random().toFloat() ) },
-                    chartAppearance = ChartAppearance(color = Color.Red)
-                )
-            ),
+            chartData = chartData,
             graphAppearance = graphAppearance.value
         )
     }
@@ -91,11 +186,19 @@ fun LineChart(
     graphAppearance: GraphAppearance
 ) {
     val density = LocalDensity.current
-    val textPaint = remember(density) {
+    val tempTextPaint = remember(density) {
         Paint().apply {
             color = graphAppearance.textColor.toArgb()
             textAlign = Paint.Align.CENTER
             textSize = density.run { graphAppearance.textSize.toPx() }
+        }
+    }
+
+    val rorTextPaint = remember(density) {
+        Paint().apply {
+            color = graphAppearance.textColor.toArgb()
+            textAlign = Paint.Align.CENTER
+            textSize = density.run { graphAppearance.text2Size.toPx() }
         }
     }
 
@@ -143,7 +246,7 @@ fun LineChart(
                     "$i",
                     startX + xAxisSpace * (i),
                     size.height - graphAppearance.paddingSpace.toPx() / 4,
-                    textPaint
+                    tempTextPaint
                 )
 
                 val lineXPath = Path().apply {
@@ -166,7 +269,7 @@ fun LineChart(
                     "$i C",
                     graphAppearance.paddingSpace.toPx() / 4,
                     endY - yAxisSpace * i + graphAppearance.textSize.toPx() / 4,
-                    textPaint
+                    tempTextPaint
                 )
 
                 val lineYPath = Path().apply {
@@ -189,7 +292,7 @@ fun LineChart(
                     "${i} c/min",
                     size.width - graphAppearance.paddingSpace.toPx() / 4f,
                     endY - y2AxisSpace * i + graphAppearance.textSize.toPx() / 4,
-                    textPaint
+                    rorTextPaint
                 )
             }
 
@@ -260,7 +363,7 @@ data class ChartData(
 )
 
 data class ChartAppearance(
-    val lineThickness: Float = 8f,
+    val lineThickness: Float = 4f,
     val isColorAreaUnderChart: Boolean = false,
     val color: Color = Color.Red,
     val showPrediction: Boolean = false,
@@ -273,6 +376,7 @@ data class GraphAppearance(
     val lineColor: Color,
     val graphAxisThickness: Float = 4f,
     val textSize: TextUnit = 24.sp,
+    val text2Size: TextUnit = 18.sp,
     val xMax: Int = 12,
     val xMin: Int = 0,
     val yMax: Float = 400f,

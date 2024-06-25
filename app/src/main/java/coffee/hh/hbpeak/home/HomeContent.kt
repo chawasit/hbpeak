@@ -1,6 +1,9 @@
 package coffee.hh.hbpeak.home
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,6 +36,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coffee.hh.hbpeak.theme.HBPeakTheme
 
 data class HomeNavigationItem(
     val title: String,
@@ -41,7 +45,6 @@ data class HomeNavigationItem(
     val onCardClick: () -> Unit
 )
 
-@Preview
 @Composable
 fun HomeContent(
     contentPadding: PaddingValues = PaddingValues(),
@@ -100,7 +103,7 @@ fun HomeContent(
         )
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceContainer),
         contentAlignment = Alignment.Center
     ) {
         LazyVerticalGrid(
@@ -130,8 +133,9 @@ private fun HomeButtonCard(
     OutlinedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
         ),
-        border = BorderStroke(1.dp, Color.Black),
+        border = BorderStroke(2.dp, Color.Black),
         modifier = Modifier
             .fillMaxWidth()
             .padding(32.dp),
@@ -147,6 +151,7 @@ private fun HomeButtonCard(
                     imageVector = icon,
                     contentDescription = title,
                     modifier = Modifier.size(32.dp),
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = title,
@@ -157,7 +162,7 @@ private fun HomeButtonCard(
                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
                     fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
                     fontWeight = MaterialTheme.typography.titleLarge.fontWeight,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
@@ -166,12 +171,20 @@ private fun HomeButtonCard(
                 modifier = Modifier
                     .align(Alignment.Start)
                     .padding(top = 8.dp),
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                 fontStyle = MaterialTheme.typography.bodyMedium.fontStyle,
                 fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
             )
         }
 
+    }
+}
+@Preview(showBackground = true, widthDp = 1200, heightDp = 1920, uiMode = UI_MODE_NIGHT_NO)
+@Preview(showBackground = true, widthDp = 1200, heightDp = 1920, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun HomeContentPreview() {
+    HBPeakTheme {
+        HomeContent()
     }
 }
