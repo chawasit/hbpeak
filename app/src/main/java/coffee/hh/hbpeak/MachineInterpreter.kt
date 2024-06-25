@@ -238,11 +238,15 @@ object MachineStateInterpreter {
                             )
 
                             else -> {
-                                Log.e(
+                                Log.w(
                                     "MachineStateInterpreter",
                                     "Unknown Error target: $target with params: $params"
                                 )
-                                newState
+                                newState.copy(
+                                    airPressureStatus = machineStatusToBoolean(status),
+                                    hasNewError = true,
+                                    errorMessages = newState.errorMessages + "Unknown Error! Check Logs for detail."
+                                )
                             }
                         }
                     }
