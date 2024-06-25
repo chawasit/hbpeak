@@ -1,6 +1,9 @@
 package coffee.hh.hbpeak.roasting
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coffee.hh.hbpeak.MachineState
@@ -15,66 +18,71 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+data class SensorDataPoint(
+    val beanTemperature: Float,
+    val drumTemperature: Float,
+    val airInletTemperature: Float,
+    val exhaustTemperature: Float,
+    val beanTemperatureRor: Float,
+    val drumTemperatureRor: Float,
+    val airInletTemperatureRor: Float,
+    val exhaustTemperatureRor: Float
+)
+data class SensorDataFrame(
+    val time: Float,
+    val point: SensorDataPoint
+)
+
 class RoastingGraphViewModel : ViewModel() {
-    val entryModel = CartesianChartModelProducer.build()
     var machineState: MutableState<MachineState>? = null
-    private val _sensorData = MutableStateFlow<List<List<Float>>>(
-        listOf(List(720) { 0f },
-            List(720) { 0f },
-            List(720) { 0f },
-            List(720) { 0f })
-    )
-    val sensorData: StateFlow<List<List<Float>>> = _sensorData
+    private var startTimer = System.currentTimeMillis()
+    private val _graphData = MutableStateFlow<List<SensorDataFrame>>(listOf())
+    val graphData: StateFlow<List<SensorDataFrame>> = _graphData
 
 
     init {
         startDataFetching()
     }
 
+    fun startTimer () {
+        resetTimer()
+    }
+
+    fun resetTimer () {
+        startTimer = System.currentTimeMillis()
+    }
+
     private fun startDataFetching() {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
-                var i = 1
                 while (true) {
+                    val currentTime = System.currentTimeMillis()
+                    _graphData.value += SensorDataFrame(
+                        time = (currentTime - startTimer) / 1000f,
+                        point = SensorDataPoint(
+                            beanTemperature = machineState?.value?.beanTemperature!!,
+                            drumTemperature = machineState?.value?.drumTemperature!!,
+                            airInletTemperature = machineState?.value?.airInletTemperature!!,
+                            exhaustTemperature = machineState?.value?.exhaustTemperature!!,
+                            beanTemperatureRor = machineState?.value?.beanTemperatureRor!!,
+                            drumTemperatureRor = machineState?.value?.drumTemperatureRor!!,
+                            airInletTemperatureRor = machineState?.value?.airInletTemperatureRor!!,
+                            exhaustTemperatureRor = machineState?.value?.exhaustTemperatureRor!!
+                        )
+                    )
+
                     when (machineState?.value?.status) {
                         MachineStatus.IDLE -> {
-                            entryModel.tryRunTransaction {
-                                lineSeries {
-                                    for (data in sensorData.value) {
-                                        series(x = data.indices.toList(), y = data.toList())
-                                    }
-                                }
-                            }
-                            i++
-                        }
 
+                        }
                         MachineStatus.ROASTING -> {
-                            entryModel.tryRunTransaction {
-                                lineSeries {
-                                    series(
-                                        x = (0..60 * 12).toList(),
-                                        y = (0..i).map { it * 5 + 25 })
-                                }
-                            }
-                            i++
-                        }
 
+                        }
                         null -> {
 
                         }
                     }
-
-                    if (i > 60 * 12) {
-                        i = 0
-                        val newData =
-                            _sensorData.value.map { it.drop(1) + (0..400).random().toFloat() }
-                        _sensorData.value = newData
-                    } else {
-                        val newData =
-                            _sensorData.value.map { it.drop(1) + (0..400).random().toFloat() }
-                        _sensorData.value = newData
-                    }
-                    delay(1000)
+                    delay(500)
                 }
             }
         }
