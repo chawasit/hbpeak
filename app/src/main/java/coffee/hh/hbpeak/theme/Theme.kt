@@ -25,12 +25,10 @@ const val slightlyDeemphasizedAlpha = 0.87f
 
 @Immutable
 data class ExtendedColorScheme(
-    val customColor1: ColorFamily,
-    val customColor2: ColorFamily,
-    val customColor3: ColorFamily,
-    val customColor4: ColorFamily,
-    val customColor5: ColorFamily,
-    val customColor6: ColorFamily,
+    val bean: ColorFamily,
+    val exaust: ColorFamily,
+    val drum: ColorFamily,
+    val inlet: ColorFamily,
 )
 
 private val lightScheme = lightColorScheme(
@@ -262,237 +260,165 @@ private val highContrastDarkColorScheme = darkColorScheme(
 )
 
 val extendedLight = ExtendedColorScheme(
-  customColor1 = ColorFamily(
-  customColor1Light,
-  onCustomColor1Light,
-  customColor1ContainerLight,
-  onCustomColor1ContainerLight,
-  ),
-  customColor2 = ColorFamily(
-  customColor2Light,
-  onCustomColor2Light,
-  customColor2ContainerLight,
-  onCustomColor2ContainerLight,
-  ),
-  customColor3 = ColorFamily(
-  customColor3Light,
-  onCustomColor3Light,
-  customColor3ContainerLight,
-  onCustomColor3ContainerLight,
-  ),
-  customColor4 = ColorFamily(
-  customColor4Light,
-  onCustomColor4Light,
-  customColor4ContainerLight,
-  onCustomColor4ContainerLight,
-  ),
-  customColor5 = ColorFamily(
-  customColor5Light,
-  onCustomColor5Light,
-  customColor5ContainerLight,
-  onCustomColor5ContainerLight,
-  ),
-  customColor6 = ColorFamily(
-  customColor6Light,
-  onCustomColor6Light,
-  customColor6ContainerLight,
-  onCustomColor6ContainerLight,
-  ),
+    bean = ColorFamily(
+        beanLight,
+        onBeanLight,
+        beanContainerLight,
+        onBeanContainerLight,
+    ),
+    exaust = ColorFamily(
+        exaustLight,
+        onExaustLight,
+        exaustContainerLight,
+        onExaustContainerLight,
+    ),
+    drum = ColorFamily(
+        drumLight,
+        onDrumLight,
+        drumContainerLight,
+        onDrumContainerLight,
+    ),
+    inlet = ColorFamily(
+        inletLight,
+        onInletLight,
+        inletContainerLight,
+        onInletContainerLight,
+    ),
 )
 
 val extendedDark = ExtendedColorScheme(
-  customColor1 = ColorFamily(
-  customColor1Dark,
-  onCustomColor1Dark,
-  customColor1ContainerDark,
-  onCustomColor1ContainerDark,
-  ),
-  customColor2 = ColorFamily(
-  customColor2Dark,
-  onCustomColor2Dark,
-  customColor2ContainerDark,
-  onCustomColor2ContainerDark,
-  ),
-  customColor3 = ColorFamily(
-  customColor3Dark,
-  onCustomColor3Dark,
-  customColor3ContainerDark,
-  onCustomColor3ContainerDark,
-  ),
-  customColor4 = ColorFamily(
-  customColor4Dark,
-  onCustomColor4Dark,
-  customColor4ContainerDark,
-  onCustomColor4ContainerDark,
-  ),
-  customColor5 = ColorFamily(
-  customColor5Dark,
-  onCustomColor5Dark,
-  customColor5ContainerDark,
-  onCustomColor5ContainerDark,
-  ),
-  customColor6 = ColorFamily(
-  customColor6Dark,
-  onCustomColor6Dark,
-  customColor6ContainerDark,
-  onCustomColor6ContainerDark,
-  ),
+    bean = ColorFamily(
+        beanDark,
+        onBeanDark,
+        beanContainerDark,
+        onBeanContainerDark,
+    ),
+    exaust = ColorFamily(
+        exaustDark,
+        onExaustDark,
+        exaustContainerDark,
+        onExaustContainerDark,
+    ),
+    drum = ColorFamily(
+        drumDark,
+        onDrumDark,
+        drumContainerDark,
+        onDrumContainerDark,
+    ),
+    inlet = ColorFamily(
+        inletDark,
+        onInletDark,
+        inletContainerDark,
+        onInletContainerDark,
+    ),
 )
 
 val extendedLightMediumContrast = ExtendedColorScheme(
-  customColor1 = ColorFamily(
-  customColor1LightMediumContrast,
-  onCustomColor1LightMediumContrast,
-  customColor1ContainerLightMediumContrast,
-  onCustomColor1ContainerLightMediumContrast,
-  ),
-  customColor2 = ColorFamily(
-  customColor2LightMediumContrast,
-  onCustomColor2LightMediumContrast,
-  customColor2ContainerLightMediumContrast,
-  onCustomColor2ContainerLightMediumContrast,
-  ),
-  customColor3 = ColorFamily(
-  customColor3LightMediumContrast,
-  onCustomColor3LightMediumContrast,
-  customColor3ContainerLightMediumContrast,
-  onCustomColor3ContainerLightMediumContrast,
-  ),
-  customColor4 = ColorFamily(
-  customColor4LightMediumContrast,
-  onCustomColor4LightMediumContrast,
-  customColor4ContainerLightMediumContrast,
-  onCustomColor4ContainerLightMediumContrast,
-  ),
-  customColor5 = ColorFamily(
-  customColor5LightMediumContrast,
-  onCustomColor5LightMediumContrast,
-  customColor5ContainerLightMediumContrast,
-  onCustomColor5ContainerLightMediumContrast,
-  ),
-  customColor6 = ColorFamily(
-  customColor6LightMediumContrast,
-  onCustomColor6LightMediumContrast,
-  customColor6ContainerLightMediumContrast,
-  onCustomColor6ContainerLightMediumContrast,
-  ),
+    bean = ColorFamily(
+        beanLightMediumContrast,
+        onBeanLightMediumContrast,
+        beanContainerLightMediumContrast,
+        onBeanContainerLightMediumContrast,
+    ),
+    exaust = ColorFamily(
+        exaustLightMediumContrast,
+        onExaustLightMediumContrast,
+        exaustContainerLightMediumContrast,
+        onExaustContainerLightMediumContrast,
+    ),
+    drum = ColorFamily(
+        drumLightMediumContrast,
+        onDrumLightMediumContrast,
+        drumContainerLightMediumContrast,
+        onDrumContainerLightMediumContrast,
+    ),
+    inlet = ColorFamily(
+        inletLightMediumContrast,
+        onInletLightMediumContrast,
+        inletContainerLightMediumContrast,
+        onInletContainerLightMediumContrast,
+    ),
 )
 
 val extendedLightHighContrast = ExtendedColorScheme(
-  customColor1 = ColorFamily(
-  customColor1LightHighContrast,
-  onCustomColor1LightHighContrast,
-  customColor1ContainerLightHighContrast,
-  onCustomColor1ContainerLightHighContrast,
-  ),
-  customColor2 = ColorFamily(
-  customColor2LightHighContrast,
-  onCustomColor2LightHighContrast,
-  customColor2ContainerLightHighContrast,
-  onCustomColor2ContainerLightHighContrast,
-  ),
-  customColor3 = ColorFamily(
-  customColor3LightHighContrast,
-  onCustomColor3LightHighContrast,
-  customColor3ContainerLightHighContrast,
-  onCustomColor3ContainerLightHighContrast,
-  ),
-  customColor4 = ColorFamily(
-  customColor4LightHighContrast,
-  onCustomColor4LightHighContrast,
-  customColor4ContainerLightHighContrast,
-  onCustomColor4ContainerLightHighContrast,
-  ),
-  customColor5 = ColorFamily(
-  customColor5LightHighContrast,
-  onCustomColor5LightHighContrast,
-  customColor5ContainerLightHighContrast,
-  onCustomColor5ContainerLightHighContrast,
-  ),
-  customColor6 = ColorFamily(
-  customColor6LightHighContrast,
-  onCustomColor6LightHighContrast,
-  customColor6ContainerLightHighContrast,
-  onCustomColor6ContainerLightHighContrast,
-  ),
+    bean = ColorFamily(
+        beanLightHighContrast,
+        onBeanLightHighContrast,
+        beanContainerLightHighContrast,
+        onBeanContainerLightHighContrast,
+    ),
+    exaust = ColorFamily(
+        exaustLightHighContrast,
+        onExaustLightHighContrast,
+        exaustContainerLightHighContrast,
+        onExaustContainerLightHighContrast,
+    ),
+    drum = ColorFamily(
+        drumLightHighContrast,
+        onDrumLightHighContrast,
+        drumContainerLightHighContrast,
+        onDrumContainerLightHighContrast,
+    ),
+    inlet = ColorFamily(
+        inletLightHighContrast,
+        onInletLightHighContrast,
+        inletContainerLightHighContrast,
+        onInletContainerLightHighContrast,
+    ),
 )
 
 val extendedDarkMediumContrast = ExtendedColorScheme(
-  customColor1 = ColorFamily(
-  customColor1DarkMediumContrast,
-  onCustomColor1DarkMediumContrast,
-  customColor1ContainerDarkMediumContrast,
-  onCustomColor1ContainerDarkMediumContrast,
-  ),
-  customColor2 = ColorFamily(
-  customColor2DarkMediumContrast,
-  onCustomColor2DarkMediumContrast,
-  customColor2ContainerDarkMediumContrast,
-  onCustomColor2ContainerDarkMediumContrast,
-  ),
-  customColor3 = ColorFamily(
-  customColor3DarkMediumContrast,
-  onCustomColor3DarkMediumContrast,
-  customColor3ContainerDarkMediumContrast,
-  onCustomColor3ContainerDarkMediumContrast,
-  ),
-  customColor4 = ColorFamily(
-  customColor4DarkMediumContrast,
-  onCustomColor4DarkMediumContrast,
-  customColor4ContainerDarkMediumContrast,
-  onCustomColor4ContainerDarkMediumContrast,
-  ),
-  customColor5 = ColorFamily(
-  customColor5DarkMediumContrast,
-  onCustomColor5DarkMediumContrast,
-  customColor5ContainerDarkMediumContrast,
-  onCustomColor5ContainerDarkMediumContrast,
-  ),
-  customColor6 = ColorFamily(
-  customColor6DarkMediumContrast,
-  onCustomColor6DarkMediumContrast,
-  customColor6ContainerDarkMediumContrast,
-  onCustomColor6ContainerDarkMediumContrast,
-  ),
+    bean = ColorFamily(
+        beanDarkMediumContrast,
+        onBeanDarkMediumContrast,
+        beanContainerDarkMediumContrast,
+        onBeanContainerDarkMediumContrast,
+    ),
+    exaust = ColorFamily(
+        exaustDarkMediumContrast,
+        onExaustDarkMediumContrast,
+        exaustContainerDarkMediumContrast,
+        onExaustContainerDarkMediumContrast,
+    ),
+    drum = ColorFamily(
+        drumDarkMediumContrast,
+        onDrumDarkMediumContrast,
+        drumContainerDarkMediumContrast,
+        onDrumContainerDarkMediumContrast,
+    ),
+    inlet = ColorFamily(
+        inletDarkMediumContrast,
+        onInletDarkMediumContrast,
+        inletContainerDarkMediumContrast,
+        onInletContainerDarkMediumContrast,
+    ),
 )
 
 val extendedDarkHighContrast = ExtendedColorScheme(
-  customColor1 = ColorFamily(
-  customColor1DarkHighContrast,
-  onCustomColor1DarkHighContrast,
-  customColor1ContainerDarkHighContrast,
-  onCustomColor1ContainerDarkHighContrast,
-  ),
-  customColor2 = ColorFamily(
-  customColor2DarkHighContrast,
-  onCustomColor2DarkHighContrast,
-  customColor2ContainerDarkHighContrast,
-  onCustomColor2ContainerDarkHighContrast,
-  ),
-  customColor3 = ColorFamily(
-  customColor3DarkHighContrast,
-  onCustomColor3DarkHighContrast,
-  customColor3ContainerDarkHighContrast,
-  onCustomColor3ContainerDarkHighContrast,
-  ),
-  customColor4 = ColorFamily(
-  customColor4DarkHighContrast,
-  onCustomColor4DarkHighContrast,
-  customColor4ContainerDarkHighContrast,
-  onCustomColor4ContainerDarkHighContrast,
-  ),
-  customColor5 = ColorFamily(
-  customColor5DarkHighContrast,
-  onCustomColor5DarkHighContrast,
-  customColor5ContainerDarkHighContrast,
-  onCustomColor5ContainerDarkHighContrast,
-  ),
-  customColor6 = ColorFamily(
-  customColor6DarkHighContrast,
-  onCustomColor6DarkHighContrast,
-  customColor6ContainerDarkHighContrast,
-  onCustomColor6ContainerDarkHighContrast,
-  ),
+    bean = ColorFamily(
+        beanDarkHighContrast,
+        onBeanDarkHighContrast,
+        beanContainerDarkHighContrast,
+        onBeanContainerDarkHighContrast,
+    ),
+    exaust = ColorFamily(
+        exaustDarkHighContrast,
+        onExaustDarkHighContrast,
+        exaustContainerDarkHighContrast,
+        onExaustContainerDarkHighContrast,
+    ),
+    drum = ColorFamily(
+        drumDarkHighContrast,
+        onDrumDarkHighContrast,
+        drumContainerDarkHighContrast,
+        onDrumContainerDarkHighContrast,
+    ),
+    inlet = ColorFamily(
+        inletDarkHighContrast,
+        onInletDarkHighContrast,
+        inletContainerDarkHighContrast,
+        onInletContainerDarkHighContrast,
+    ),
 )
 
 @Immutable
