@@ -20,37 +20,30 @@ data class MachineState(
     val destonerRunningStatus: Boolean = false,
     val exhaustFilterRunningStatus: Boolean = false,
     val beanTemperatureStatus: Boolean = false,
-    val beanTemperature: Float = 45.0f,
+    val beanTemperature: Float = 100.0f,
     val exhaustTemperatureStatus: Boolean = false,
-    val exhaustTemperature: Float = 50.0f,
+    val exhaustTemperature: Float = 120.0f,
     val airInletTemperatureStatus: Boolean = false,
-    val airInletTemperature: Float = 100.0f,
+    val airInletTemperature: Float = 200.0f,
     val drumTemperatureStatus: Boolean = false,
-    val drumTemperature: Float = 60.0f,
+    val drumTemperature: Float = 180.0f,
     val airPressureStatus: Boolean = false,
     val airPressure: Float = 0.0f,
     val gasPressureStatus: Boolean = false,
     val gasPressure: Float = 0.0f,
-    val beanTemperatureRor: Float = 0.0f,
-    val exhaustTemperatureRor: Float = 0.0f,
-    val airInletTemperatureRor: Float = 0.0f,
-    val drumTemperatureRor: Float = 0.0f,
+    val beanTemperatureRor: Float = 3.0f,
+    val exhaustTemperatureRor: Float = 6.0f,
+    val airInletTemperatureRor: Float = 10.0f,
+    val drumTemperatureRor: Float = 15.0f,
     val powerOnStatus: Boolean = false,
     val hmiRelayStatus: Boolean = false,
     val hasNewError: Boolean = false,
     val errors: List<MachineError> = emptyList(),
-    val status: MachineStatus = MachineStatus.IDLE,
-    val startRoastingTime: Long = 0L
+    val roastingStatus: Boolean = false,
+    val startRoastingTime: Long = 0
 )
 
 data class MachineError(
     val time: Instant,
     val message: String
 )
-
-enum class MachineStatus {
-    IDLE,
-    ROASTING,
-    BETWEEN_BATCH
-}
-

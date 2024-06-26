@@ -79,6 +79,9 @@ class MainActivity : AppCompatActivity() {
         // Initialize Serial connection
         initSerial()
 
+        // send start sequence to the machine
+        sendStartSequence()
+
         // Start routine to request machine status
         startStatusRequestRoutine()
 
@@ -172,8 +175,30 @@ class MainActivity : AppCompatActivity() {
         isSerialProcessing = false
     }
 
+    private fun sendStartSequence() {
+        coroutineScope.launch {
+            enqueueCommand(
+                MachineStateInterpreter.generateControlCommand(
+                    machineState.value,
+                    MachineControlUnitIds.POWER_ON,
+                    MachineNodeStatus.ON
+                )
+            )
+
+            enqueueCommand(
+                MachineStateInterpreter.generateControlCommand(
+                    machineState.value,
+                    MachineControlUnitIds.HMI_RELAY,
+                    MachineNodeStatus.ON
+                )
+            )
+        }
+    }
+
     private fun startStatusRequestRoutine() {
         coroutineScope.launch {
+            delay(1500)
+
             while (true) {
                 if (commandQueue.isEmpty()) {
                     val statusRequestCommand =

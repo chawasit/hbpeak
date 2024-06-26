@@ -121,6 +121,10 @@ object MachineStateInterpreter {
                                 hmiRelayStatus = machineStatusToBoolean(status)
                             )
 
+                            MachineControlUnitIds.ROASTING_STATUS -> newState.copy(
+                                roastingStatus = machineStatusToBoolean(status)
+                            )
+
                             else -> {
                                 Log.e(
                                     "MachineStateInterpreter",
@@ -305,7 +309,7 @@ object MachineStateInterpreter {
         currentState: MachineState,
         target: Int,
         status: String,
-        value: Int
+        value: Int = 0
     ): String {
         val commandList = listOf(
             mapOf(

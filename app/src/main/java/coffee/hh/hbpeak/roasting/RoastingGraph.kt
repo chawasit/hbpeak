@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -128,43 +127,46 @@ fun RoastingGraph(
     val chartData = listOf(
         ChartData(
             points = beanTemperatureRorChartData, chartAppearance = ChartAppearance(
-                color = Color.Blue.copy(alpha = 0.5f), onSecondAxis = true
+                color = MaterialTheme.colorScheme.secondary, onSecondAxis = true
             )
         ),
         ChartData(
             points = drumTemperatureRorChartData, chartAppearance = ChartAppearance(
-                color = Color.Green.copy(alpha = 0.5f), onSecondAxis = true
+                color = MaterialTheme.colorScheme.primary, onSecondAxis = true
             )
         ),
         ChartData(
             points = airInletTemperatureRorChartData, chartAppearance = ChartAppearance(
-                color = Color.Red.copy(alpha = 0.5f), onSecondAxis = true
+                color = MaterialTheme.colorScheme.error, onSecondAxis = true
             )
         ),
         ChartData(
             points = exhaustTemperatureRorChartData, chartAppearance = ChartAppearance(
-                color = Color.Yellow.copy(alpha = 0.5f), onSecondAxis = true
+                color = MaterialTheme.colorScheme.tertiary, onSecondAxis = true
             )
         ),
 
         ChartData(
             points = drumTemperatureChartData, chartAppearance = ChartAppearance(
-                color = Color.Green.copy(alpha = 0.7f),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                showPrediction = true
             )
         ),
         ChartData(
             points = airInletTemperatureChartData, chartAppearance = ChartAppearance(
-                color = Color.Red.copy(alpha = 0.7f),
+                color = MaterialTheme.colorScheme.onErrorContainer,
             )
         ),
         ChartData(
             points = exhaustTemperatureChartData, chartAppearance = ChartAppearance(
-                color = Color.Yellow.copy(alpha = 0.7f),
+                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                showPrediction = true
             )
         ),
         ChartData(
             points = beanTemperatureChartData, chartAppearance = ChartAppearance(
-                color = Color.Blue.copy(alpha = 0.7f),
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                showPrediction = true
             )
         ),
     )
@@ -202,7 +204,7 @@ fun LineChart(
 
     Box(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.surfaceBright)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(horizontal = 32.dp, vertical = 12.dp), contentAlignment = Alignment.Center
     ) {
         Canvas(
@@ -291,8 +293,7 @@ fun LineChart(
 
                 val points = chart.points
                 val ySpace = if (chart.chartAppearance.onSecondAxis) y2AxisSpace else yAxisSpace
-                val lineThickness =
-                    if (chart.chartAppearance.onSecondAxis) graphAppearance.graphAxisThickness / 2 else chart.chartAppearance.lineThickness
+
                 /** placing our x axis points */
                 for (i in points.indices) {
                     if (points[i].x < 0) continue
@@ -302,6 +303,19 @@ fun LineChart(
                         min(endY, endY - (ySpace * points[i].y))
                     )
                     coordinates.add(PointF(x1, y1))
+                }
+
+                if (coordinates.isEmpty()) continue
+
+                if (!chart.chartAppearance.onSecondAxis || chart.chartAppearance.showPrediction) {
+                    drawContext.canvas.nativeCanvas.drawCircle(
+                        coordinates.last().x,
+                        coordinates.last().y,
+                        chart.chartAppearance.lineCapRadius,
+                        Paint().apply {
+                            color = chart.chartAppearance.color.toArgb()
+                        }
+                    )
                 }
 
                 /** calculating the connection points */
@@ -345,6 +359,44 @@ fun LineChart(
                         ) else null
                     )
                 )
+
+                if (chart.chartAppearance.showPrediction) {
+                    val lastTwoPoint = points.takeLast(2)
+                    val secondLastPoint = lastTwoPoint.first()
+                    val lastPoint = lastTwoPoint.last()
+                    val deltaX = lastPoint.x - secondLastPoint.x
+                    val deltaY = lastPoint.y - secondLastPoint.y
+                    val slope = deltaY / deltaX
+
+                    if (slope <= 0 && lastPoint.x < 1) continue
+
+                    val predictX = lastPoint.x + 2
+                    val predictY = lastPoint.y + slope * 2
+
+                    val x1 = startX + (xAxisSpace * predictX)
+                    val y1 = max(
+                        startY,
+                        min(endY, endY - (ySpace * predictY))
+                    )
+
+                    val lastCoordinate = coordinates.last()
+
+                    val predictStroke = Path().apply {
+                        reset()
+                        moveTo(lastCoordinate.x, lastCoordinate.y)
+                        lineTo(x1, y1)
+                    }
+
+                    drawPath(
+                        predictStroke,
+                        color = chart.chartAppearance.color.copy(alpha = 0.6f),
+                        style = Stroke(
+                            width = chart.chartAppearance.lineThickness,
+                            cap = StrokeCap.Round,
+                            pathEffect = PathEffect.dashPathEffect(floatArrayOf(5f, 5f))
+                        )
+                    )
+                }
             }
         }
     }
@@ -356,7 +408,8 @@ data class ChartData(
 )
 
 data class ChartAppearance(
-    val lineThickness: Float = 3f,
+    val lineThickness: Float = 4f,
+    val lineCapRadius: Float = 4f,
     val isColorAreaUnderChart: Boolean = false,
     val color: Color = Color.Red,
     val showPrediction: Boolean = false,
@@ -367,7 +420,7 @@ data class GraphAppearance(
     val backgroundColor: Color,
     val textColor: Color,
     val lineColor: Color,
-    val graphAxisThickness: Float = 2f,
+    val graphAxisThickness: Float = 3f,
     val textSize: TextUnit = 24.sp,
     val text2Size: TextUnit = 18.sp,
     val xMax: Int = 12,

@@ -13,6 +13,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -26,7 +27,7 @@ const val slightlyDeemphasizedAlpha = 0.87f
 @Immutable
 data class ExtendedColorScheme(
     val bean: ColorFamily,
-    val exaust: ColorFamily,
+    val exhaust: ColorFamily,
     val drum: ColorFamily,
     val inlet: ColorFamily,
 )
@@ -266,7 +267,7 @@ val extendedLight = ExtendedColorScheme(
         beanContainerLight,
         onBeanContainerLight,
     ),
-    exaust = ColorFamily(
+    exhaust = ColorFamily(
         exaustLight,
         onExaustLight,
         exaustContainerLight,
@@ -293,7 +294,7 @@ val extendedDark = ExtendedColorScheme(
         beanContainerDark,
         onBeanContainerDark,
     ),
-    exaust = ColorFamily(
+    exhaust = ColorFamily(
         exaustDark,
         onExaustDark,
         exaustContainerDark,
@@ -320,7 +321,7 @@ val extendedLightMediumContrast = ExtendedColorScheme(
         beanContainerLightMediumContrast,
         onBeanContainerLightMediumContrast,
     ),
-    exaust = ColorFamily(
+    exhaust = ColorFamily(
         exaustLightMediumContrast,
         onExaustLightMediumContrast,
         exaustContainerLightMediumContrast,
@@ -347,7 +348,7 @@ val extendedLightHighContrast = ExtendedColorScheme(
         beanContainerLightHighContrast,
         onBeanContainerLightHighContrast,
     ),
-    exaust = ColorFamily(
+    exhaust = ColorFamily(
         exaustLightHighContrast,
         onExaustLightHighContrast,
         exaustContainerLightHighContrast,
@@ -374,7 +375,7 @@ val extendedDarkMediumContrast = ExtendedColorScheme(
         beanContainerDarkMediumContrast,
         onBeanContainerDarkMediumContrast,
     ),
-    exaust = ColorFamily(
+    exhaust = ColorFamily(
         exaustDarkMediumContrast,
         onExaustDarkMediumContrast,
         exaustContainerDarkMediumContrast,
@@ -401,7 +402,7 @@ val extendedDarkHighContrast = ExtendedColorScheme(
         beanContainerDarkHighContrast,
         onBeanContainerDarkHighContrast,
     ),
-    exaust = ColorFamily(
+    exhaust = ColorFamily(
         exaustDarkHighContrast,
         onExaustDarkHighContrast,
         exaustContainerDarkHighContrast,
@@ -440,28 +441,28 @@ fun HBPeakTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-  val colorScheme = when {
-      dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-          val context = LocalContext.current
-          if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-      }
-      
-      darkTheme -> darkScheme
-      else -> lightScheme
-  }
-  val view = LocalView.current
-  if (!view.isInEditMode) {
-    SideEffect {
-      val window = (view.context as Activity).window
-      window.statusBarColor = colorScheme.primary.toArgb()
-      WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-    }
-  }
+    val colorScheme = when {
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            val context = LocalContext.current
+            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        }
 
-  MaterialTheme(
-    colorScheme = colorScheme,
-    typography = AppTypography,
-    content = content
-  )
+        darkTheme -> darkScheme
+        else -> lightScheme
+    }
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = colorScheme.primary.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+        }
+    }
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = AppTypography,
+        content = content
+    )
 }
 

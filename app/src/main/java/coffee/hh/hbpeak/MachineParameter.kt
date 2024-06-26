@@ -19,6 +19,7 @@ object MachineControlUnitIds {
     const val DRUM_TEMPERATURE = 19
     const val AIR_PRESSURE = 32
     const val GAS_PRESSURE = 33
+    const val ROASTING_STATUS = 224
     const val POWER_ON = 229
     const val HMI_RELAY = 227
 }

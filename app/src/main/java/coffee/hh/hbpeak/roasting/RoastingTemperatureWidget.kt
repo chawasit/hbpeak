@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,11 +32,13 @@ fun RoastingTemperatureWidget(
     title: String = "Title",
     temperature: Float = 199f,
     rateOfRise: Float = 10f,
+    backgroundColor: Color = MaterialTheme.colorScheme.tertiaryContainer,
+    textColor: Color = MaterialTheme.colorScheme.onTertiaryContainer
 ) {
     Card {
         Column(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.tertiaryContainer)
+                .background(backgroundColor)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -47,11 +50,11 @@ fun RoastingTemperatureWidget(
                     imageVector = Icons.Outlined.Thermostat,
                     contentDescription = title,
                     modifier = Modifier.size(32.dp),
-                    tint = MaterialTheme.colorScheme.onTertiaryContainer
+                    tint = textColor
                 )
                 Text(
                     text = title,
-                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                    color = textColor,
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier
                         .width(IntrinsicSize.Max)
@@ -65,7 +68,7 @@ fun RoastingTemperatureWidget(
             ) {
                 Text(
                     text = String.format("%5.1f", temperature),
-                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                    color = textColor,
                     style = MaterialTheme.typography.displayMedium,
                     textAlign = TextAlign.End,
                     modifier = Modifier.weight(2f)
@@ -84,7 +87,7 @@ fun RoastingTemperatureWidget(
             ) {
                 Text(
                     text = String.format("%4.1f", rateOfRise),
-                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                    color = textColor,
                     style = MaterialTheme.typography.displaySmall,
                     textAlign = TextAlign.End,
                     modifier = Modifier.weight(1f)
