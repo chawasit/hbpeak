@@ -1,6 +1,7 @@
 package coffee.hh.hbpeak
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.hardware.usb.UsbManager
 import android.os.Build
 import android.os.Bundle
@@ -11,12 +12,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.preferencesDataStore
 import coffee.hh.hbpeak.theme.HBPeakTheme
 import com.hoho.android.usbserial.driver.UsbSerialPort
 import com.hoho.android.usbserial.driver.UsbSerialProber
@@ -27,8 +31,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webSocketServer: NettyApplicationEngine
@@ -75,8 +83,21 @@ class MainActivity : AppCompatActivity() {
         startStatusRequestRoutine()
 
         setContent {
-            HBPeakTheme(darkTheme = true) {
-                HBPeakNavHost(machineState, ::enqueueCommand)
+            val USE_DARK_THEME = booleanPreferencesKey("use_dark_theme")
+            val useDarkThemeSetting: Flow<Boolean> = dataStore.data
+                .map { preferences ->
+                    preferences[USE_DARK_THEME] ?: true
+                }
+
+            HBPeakTheme(darkTheme = useDarkThemeSetting.collectAsState(true).value) {
+                HBPeakNavHost(machineState, ::enqueueCommand, onToggleTheme = {
+                    coroutineScope.launch {
+                        dataStore.edit { settings ->
+                            val current = settings[USE_DARK_THEME] ?: true
+                            settings[USE_DARK_THEME] = !current
+                        }
+                    }
+                })
             }
         }
     }
@@ -104,7 +125,7 @@ class MainActivity : AppCompatActivity() {
             val driver = preferDriver
             val connection = usbManager.openDevice(driver.device)
             if (connection == null) {
-                Log.e("SerialProcessor","Connection is null")
+                Log.e("SerialProcessor", "Connection is null")
                 return
             }
 
@@ -115,11 +136,12 @@ class MainActivity : AppCompatActivity() {
             val usbIoManager = SerialInputOutputManager(serialPort, serialListener)
             Executors.newSingleThreadExecutor().submit(usbIoManager)
         } else {
-            Log.e("SerialProcessor","No Available Driver")
+            Log.e("SerialProcessor", "No Available Driver")
         }
     }
 
     private val serialListener = object : SerialInputOutputManager.Listener {
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onNewData(data: ByteArray) {
             coroutineScope.launch {
                 serialReadBuffer.append(String(data))
@@ -128,10 +150,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onRunError(e: Exception) {
-            Log.e("SerialProcessor","Serial Error: ${e.message}")
+            Log.e("SerialProcessor", "Serial Error: ${e.message}")
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun processBuffer() {
         if (isSerialProcessing) return
 
@@ -141,8 +164,9 @@ class MainActivity : AppCompatActivity() {
             if (endIndex != -1) {
                 val message = serialReadBuffer.substring(0, endIndex)
                 serialReadBuffer.delete(0, endIndex + 1)
-                Log.d("SerialProcessor","Received: $message")
-                machineState.value = MachineStateInterpreter.interpretMessage(machineState.value, message)
+                Log.d("SerialProcessor", "Received: $message")
+                machineState.value =
+                    MachineStateInterpreter.interpretMessage(machineState.value, message)
             }
         }
         isSerialProcessing = false
@@ -152,7 +176,8 @@ class MainActivity : AppCompatActivity() {
         coroutineScope.launch {
             while (true) {
                 if (commandQueue.isEmpty()) {
-                    val statusRequestCommand = MachineStateInterpreter.generateStatusRequestCommand()
+                    val statusRequestCommand =
+                        MachineStateInterpreter.generateStatusRequestCommand()
                     enqueueCommand(statusRequestCommand)
                 }
                 delay(250)
@@ -161,7 +186,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun enqueueCommand(command: String) {
-        Log.i("SerialProcessor" ,"Enqueue Command: $command")
+        Log.i("SerialProcessor", "Enqueue Command: $command")
         commandQueue.addLast(command)
         processCommandQueue()
     }
@@ -174,7 +199,7 @@ class MainActivity : AppCompatActivity() {
                 isSending = true
                 val command = commandQueue.removeFirst()
                 sendMessageToMachine(command)
-                delay(100)
+                delay(200)
             }
             isSending = false
         }

@@ -1,5 +1,8 @@
 package coffee.hh.hbpeak
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -37,11 +40,14 @@ object Destinations {
 fun HBPeakNavHost(
     machineState: MutableState<MachineState>,
     enqueueCommand: (String) -> Unit,
+    onToggleTheme: () -> Unit,
     navController: NavHostController = rememberNavController(),
 ) {
     NavHost(
         navController = navController,
         startDestination = WELCOME_ROUTE,
+        enterTransition = { fadeIn(tween(400)) },
+        exitTransition = { fadeOut(tween(300)) }
     ) {
         composable(WELCOME_ROUTE) {
             WelcomeRoute(
@@ -87,15 +93,17 @@ fun HBPeakNavHost(
 
         composable(HOME_ROUTE) {
             HomeRoute(
-                navController = navController
+                navController = navController,
+                onToggleTheme = onToggleTheme
             )
         }
 
         composable(ROASTING_ROUTE) {
             RoastingRoute(
                 navController = navController,
-                machineState,
-                enqueueCommand,
+                machineState = machineState,
+                enqueueCommand = enqueueCommand,
+                onToggleTheme = onToggleTheme
             )
         }
     }

@@ -80,4 +80,5 @@
     <string name="strongly_like">Strongly\nLike</string>
     <string name="neutral">Neutral</string>
     <string name="home_bar">Dashboard</string>
+    <string name="toggle_dark_theme">Toggle Dark Theme</string>
 </resources>

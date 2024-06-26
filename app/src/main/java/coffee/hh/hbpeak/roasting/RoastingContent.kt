@@ -323,7 +323,7 @@ fun RoastingContent(
                         item {
                             SwitchWithLabel(
                                 label = "Air",
-                                value = "${machineState.value.fanLevel} (${String.format("%3.0f",machineState.value.airPressure)} Pa)",
+                                value = "${machineState.value.fanLevel} (${String.format("%-3.0f",machineState.value.airPressure)} Pa)",
                                 state = machineState.value.fanOnStatus,
                                 onStateChange = {
                                     currentField.value = "Air Speed"

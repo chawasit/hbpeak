@@ -6,7 +6,12 @@ import androidx.navigation.NavHostController
 @Composable
 fun HomeRoute(
     navController: NavHostController,
-){
-    HomeScreen(onNavUp = navController::navigateUp, navController)
+    onToggleTheme: () -> Unit,
+) {
+    HomeScreen(
+        onNavUp = navController::navigateUp,
+        navController,
+        onToggleTheme = onToggleTheme
+    )
 }
 

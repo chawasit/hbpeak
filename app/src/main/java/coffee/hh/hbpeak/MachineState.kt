@@ -1,5 +1,7 @@
 package coffee.hh.hbpeak
 
+import java.time.Instant
+
 data class MachineState(
     val preheatTemperatureOnStatus: Boolean = false,
     val preheatTemperature: Float = 0.0f,
@@ -36,12 +38,19 @@ data class MachineState(
     val powerOnStatus: Boolean = false,
     val hmiRelayStatus: Boolean = false,
     val hasNewError: Boolean = false,
-    val errorMessages: List<String> = emptyList(),
-    val status: MachineStatus = MachineStatus.IDLE
+    val errors: List<MachineError> = emptyList(),
+    val status: MachineStatus = MachineStatus.IDLE,
+    val startRoastingTime: Long = 0L
+)
+
+data class MachineError(
+    val time: Instant,
+    val message: String
 )
 
 enum class MachineStatus {
     IDLE,
-    ROASTING
+    ROASTING,
+    BETWEEN_BATCH
 }
 

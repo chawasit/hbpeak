@@ -11,11 +11,13 @@ fun RoastingRoute(
     navController: NavHostController,
     machineState: MutableState<MachineState>,
     enqueueCommand: (String) -> Unit,
+    onToggleTheme: () -> Unit,
 ) {
     RoastingScreen(
         onNavUp = navController::navigateUp,
         machineState = machineState,
         enqueueCommand = enqueueCommand,
+        onToggleTheme = onToggleTheme
     )
 }
 

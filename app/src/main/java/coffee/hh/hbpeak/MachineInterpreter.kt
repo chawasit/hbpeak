@@ -1,10 +1,14 @@
 package coffee.hh.hbpeak
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import org.json.JSONObject
+import java.time.Instant
 
 object MachineStateInterpreter {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun interpretMessage(currentState: MachineState, message: String): MachineState {
         try {
             val json = JSONObject(message)
@@ -138,103 +142,137 @@ object MachineStateInterpreter {
                             MachineControlUnitIds.PREHEAT_TEMPERATURE -> newState.copy(
                                 preheatTemperatureOnStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Preheat Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Preheat Failed"
+                                )
                             )
 
                             MachineControlUnitIds.GAS_LEVEL -> newState.copy(
                                 gasOnStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Burner Ignition Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Burner Ignition Failed"
+                                )
                             )
 
                             MachineControlUnitIds.DRUM_RPM -> newState.copy(
                                 drumOnStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Drum Motor Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Drum Motor Failed"
+                                )
                             )
 
                             MachineControlUnitIds.FAN_LEVEL -> newState.copy(
                                 fanOnStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Fan Motor Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Fan Motor Failed"
+                                )
                             )
 
                             MachineControlUnitIds.COOLING_TRAY_FAN -> newState.copy(
                                 coolingTrayFanRunningStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Cooling Tray Fan Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Cooling Tray Fan Failed"
+                                )
                             )
 
                             MachineControlUnitIds.COOLING_TRAY_STIR -> newState.copy(
                                 coolingTrayStirRunningStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Cooling Tray Stir Motor Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Cooling Tray Stir Motor Failed"
+                                )
                             )
 
                             MachineControlUnitIds.BEAN_HOLDER -> newState.copy(
                                 beanHolderOpenStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Bean Holder Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Bean Holder Failed"
+                                )
                             )
 
                             MachineControlUnitIds.DRUM_DOOR -> newState.copy(
                                 drumDoorOpenStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Drum Door Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Drum Door Failed"
+                                )
                             )
 
                             MachineControlUnitIds.DROP_DOOR -> newState.copy(
                                 dropDoorOpenStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Drop Door Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Drop Door Failed"
+                                )
                             )
 
                             MachineControlUnitIds.LOADER -> newState.copy(
                                 loaderRunningStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Loader Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Loader Failed"
+                                )
                             )
 
                             MachineControlUnitIds.DESTONER -> newState.copy(
                                 destonerRunningStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Destoner Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Destoner Failed"
+                                )
                             )
 
                             MachineControlUnitIds.EXHAUST_FILTER -> newState.copy(
                                 exhaustFilterRunningStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Exhaust Filter Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Exhaust Filter Failed"
+                                )
                             )
 
                             MachineControlUnitIds.BEAN_TEMPERATURE -> newState.copy(
                                 beanTemperatureStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Bean Temperature Sensor Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Bean Temperature Sensor Failed"
+                                )
                             )
 
                             MachineControlUnitIds.EXHAUST_TEMPERATURE -> newState.copy(
                                 exhaustTemperatureStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Exhaust Temperature Sensor Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Exhaust Temperature Sensor Failed"
+                                )
                             )
 
                             MachineControlUnitIds.AIR_INLET_TEMPERATURE -> newState.copy(
                                 airInletTemperatureStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Air Inlet Temperature Sensor Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Air Inlet Temperature Sensor Failed"
+                                )
                             )
 
                             MachineControlUnitIds.DRUM_TEMPERATURE -> newState.copy(
                                 drumTemperatureStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Drum Temperature Sensor Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Drum Temperature Sensor Failed"
+                                )
                             )
 
                             MachineControlUnitIds.AIR_PRESSURE -> newState.copy(
                                 airPressureStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
-                                errorMessages = newState.errorMessages + "Air Pressure Sensor Failed"
+                                errors = newState.errors + MachineError(
+                                    Instant.now(), "Air Pressure Sensor Failed"
+                                )
                             )
 
                             else -> {
@@ -245,7 +283,10 @@ object MachineStateInterpreter {
                                 newState.copy(
                                     airPressureStatus = machineStatusToBoolean(status),
                                     hasNewError = true,
-                                    errorMessages = newState.errorMessages + "Unknown Error! Check Logs for detail."
+                                    errors = newState.errors + MachineError(
+                                        Instant.now(),
+                                        "Unknown Error! Check Logs for detail."
+                                    )
                                 )
                             }
                         }

@@ -39,6 +39,7 @@ class RoastingGraphViewModel(savedStateHandle: SavedStateHandle = SavedStateHand
     private var _startTimer by savedStateHandle.saveable {
         mutableLongStateOf(System.currentTimeMillis())
     }
+
     var graphData: List<SensorDataFrame> by savedStateHandle.saveable {
         mutableStateOf(listOf())
     }

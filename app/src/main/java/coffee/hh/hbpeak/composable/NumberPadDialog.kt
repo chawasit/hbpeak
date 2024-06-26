@@ -119,7 +119,7 @@ fun NumberPadDialog(
                         FilledTonalButton(onClick = {
                             onTurnOff(value)
                             onDismissRequest()
-                        }, modifier = Modifier.width(240.dp)) {
+                        }, modifier = Modifier.width(240.dp).height(64.dp)) {
                             Text(
                                 "Turn Off",
                                 Modifier
@@ -135,7 +135,7 @@ fun NumberPadDialog(
                             onValueConfirm(value)
                             onDismissRequest()
                         }
-                    }, modifier = Modifier.width(240.dp)) {
+                    }, modifier = Modifier.width(240.dp).height(64.dp)) {
                         Text(
                             "OK",
                             Modifier
