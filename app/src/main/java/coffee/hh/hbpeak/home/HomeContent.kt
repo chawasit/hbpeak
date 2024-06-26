@@ -18,9 +18,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Assessment
 import androidx.compose.material.icons.outlined.AutoGraph
+import androidx.compose.material.icons.outlined.DownloadDone
 import androidx.compose.material.icons.outlined.Fireplace
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Inventory
+import androidx.compose.material.icons.outlined.LocalFireDepartment
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Power
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Wallpaper
 import androidx.compose.material3.CardDefaults
@@ -54,7 +58,7 @@ fun HomeContent(
         HomeNavigationItem(
             title = "Roasting",
             description = "Start your roast!",
-            icon = Icons.Outlined.Fireplace,
+            icon = Icons.Outlined.LocalFireDepartment,
             onCardClick = onRoastingClick
         ),
         HomeNavigationItem(
@@ -66,25 +70,13 @@ fun HomeContent(
         HomeNavigationItem(
             title = "Roast Log",
             description = "View your roast history.",
-            icon = Icons.Outlined.AutoGraph,
+            icon = Icons.Outlined.DownloadDone,
             onCardClick = {}
         ),
         HomeNavigationItem(
             title = "Profile",
             description = "Manage your roast profiles.",
-            icon = Icons.Outlined.Wallpaper,
-            onCardClick = {}
-        ),
-        HomeNavigationItem(
-            title = "Green Inventory",
-            description = "Manage your green inventory.",
-            icon = Icons.Outlined.Inventory,
-            onCardClick = {}
-        ),
-        HomeNavigationItem(
-            title = "Cupping",
-            description = "Quality Assessment on Hand",
-            icon = Icons.Outlined.Assessment,
+            icon = Icons.Outlined.Folder,
             onCardClick = {}
         ),
         HomeNavigationItem(
@@ -99,11 +91,18 @@ fun HomeContent(
             icon = Icons.Outlined.Settings,
             onCardClick = {}
         ),
-
-        )
+        HomeNavigationItem(
+            title = "Shutdown",
+            description = "Automate Shutdown after Cooling",
+            icon = Icons.Outlined.Power,
+            onCardClick = {}
+        ),
+    )
 
     Box(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceContainer),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surfaceContainer),
         contentAlignment = Alignment.Center
     ) {
         LazyVerticalGrid(
@@ -176,6 +175,7 @@ private fun HomeButtonCard(
 
     }
 }
+
 @Preview(showBackground = true, widthDp = 1200, heightDp = 1920, uiMode = UI_MODE_NIGHT_NO)
 @Preview(showBackground = true, widthDp = 1200, heightDp = 1920, uiMode = UI_MODE_NIGHT_YES)
 @Composable
