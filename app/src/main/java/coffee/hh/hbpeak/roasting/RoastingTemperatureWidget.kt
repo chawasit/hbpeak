@@ -87,6 +87,7 @@ fun RoastingTemperatureWidget(
                     color = MaterialTheme.colorScheme.onTertiaryContainer,
                     style = MaterialTheme.typography.displaySmall,
                     textAlign = TextAlign.End,
+                    modifier = Modifier.weight(1f)
                 )
                 Text(
                     text = "C/min.",

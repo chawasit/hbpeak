@@ -33,7 +33,7 @@ fun NumberPadDialog(
     showTurnOff: Boolean = true,
     onDismissRequest: () -> Unit = {},
     onValueConfirm: (String) -> Unit = {},
-    onTurnOff: (() -> Unit)? = {}
+    onTurnOff: ((String) -> Unit)? = {}
 ) {
     var value: String by remember { mutableStateOf(initialValue) }
     val hasError = remember { mutableStateOf(false) }
@@ -117,7 +117,7 @@ fun NumberPadDialog(
                 ) {
                     if (showTurnOff && onTurnOff != null) {
                         FilledTonalButton(onClick = {
-                            onTurnOff()
+                            onTurnOff(value)
                             onDismissRequest()
                         }, modifier = Modifier.width(240.dp)) {
                             Text(

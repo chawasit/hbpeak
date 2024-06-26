@@ -138,11 +138,11 @@ private fun HomeButtonCard(
         border = BorderStroke(2.dp, Color.Black),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(32.dp),
+            .padding(64.dp),
         onClick = onCardClick
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(32.dp)
         ) {
             Row(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -150,18 +150,16 @@ private fun HomeButtonCard(
                 Icon(
                     imageVector = icon,
                     contentDescription = title,
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(48.dp),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = title,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 8.dp),
+                        .padding(start = 16.dp),
                     textAlign = TextAlign.Start,
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    fontStyle = MaterialTheme.typography.titleLarge.fontStyle,
-                    fontWeight = MaterialTheme.typography.titleLarge.fontWeight,
+                    style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
             }
@@ -172,9 +170,7 @@ private fun HomeButtonCard(
                     .align(Alignment.Start)
                     .padding(top = 8.dp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                fontStyle = MaterialTheme.typography.bodyMedium.fontStyle,
-                fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
+                style = MaterialTheme.typography.headlineSmall
             )
         }
 

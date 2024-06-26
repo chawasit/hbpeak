@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
@@ -37,6 +38,8 @@ import coffee.hh.hbpeak.MachineState
 import coffee.hh.hbpeak.theme.HBPeakTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.max
+import kotlin.math.min
 
 @Composable
 fun RoastingGraph(
@@ -52,9 +55,7 @@ fun RoastingGraph(
     val graphAppearance = remember {
         mutableStateOf(
             GraphAppearance(
-                backgroundColor,
-                textColor,
-                lineColor
+                backgroundColor, textColor, lineColor
             )
         )
     }
@@ -64,116 +65,115 @@ fun RoastingGraph(
             roastingGraphViewModel.resetTimer()
             while (true) {
                 roastingGraphViewModel.dataFetching(machineState.value)
-                if (graphAppearance.value.xMax < roastingGraphViewModel.elapseMinutes()) {
-                    graphAppearance.value = graphAppearance.value.copy(xMax = roastingGraphViewModel.elapseMinutes().toInt() + 2)
+                if (graphAppearance.value.xMax < roastingGraphViewModel.elapseMinutes() - 1) {
+                    graphAppearance.value = graphAppearance.value.copy(
+                        xMax = roastingGraphViewModel.elapseMinutes().toInt() + 2
+                    )
                 }
-                delay(500)
+                delay(1000)
             }
         }
     }
 
-    val graphData = roastingGraphViewModel.graphData.collectAsState()
+    val graphData = roastingGraphViewModel.graphData
 
-    val beanTemperatureChartData = graphData.value.map { frame ->
+    val beanTemperatureChartData = graphData.map { frame ->
         PointF(
-            frame.time,
-            frame.point.beanTemperature
+            frame.time, frame.point.beanTemperature
         )
     }
 
-    val drumTemperatureChartData = graphData.value.map { frame ->
+    val drumTemperatureChartData = graphData.map { frame ->
         PointF(
-            frame.time,
-            frame.point.drumTemperature
+            frame.time, frame.point.drumTemperature
         )
     }
 
-    val airInletTemperatureChartData = graphData.value.map { frame ->
+    val airInletTemperatureChartData = graphData.map { frame ->
         PointF(
-            frame.time,
-            frame.point.airInletTemperature
+            frame.time, frame.point.airInletTemperature
         )
     }
 
-    val exhaustTemperatureChartData = graphData.value.map { frame ->
+    val exhaustTemperatureChartData = graphData.map { frame ->
         PointF(
-            frame.time,
-            frame.point.exhaustTemperature
+            frame.time, frame.point.exhaustTemperature
         )
     }
 
-    val beanTemperatureRorChartData = graphData.value.map { frame ->
+    val beanTemperatureRorChartData = graphData.map { frame ->
         PointF(
-            frame.time,
-            frame.point.beanTemperatureRor
+            frame.time, frame.point.beanTemperatureRor
         )
     }
 
-    val drumTemperatureRorChartData = graphData.value.map { frame ->
+    val drumTemperatureRorChartData = graphData.map { frame ->
         PointF(
-            frame.time,
-            frame.point.drumTemperatureRor
+            frame.time, frame.point.drumTemperatureRor
         )
     }
 
-    val airInletTemperatureRorChartData = graphData.value.map { frame ->
+    val airInletTemperatureRorChartData = graphData.map { frame ->
         PointF(
-            frame.time,
-            frame.point.airInletTemperatureRor
+            frame.time, frame.point.airInletTemperatureRor
         )
     }
 
-    val exhaustTemperatureRorChartData = graphData.value.map { frame ->
+    val exhaustTemperatureRorChartData = graphData.map { frame ->
         PointF(
-            frame.time,
-            frame.point.exhaustTemperatureRor
+            frame.time, frame.point.exhaustTemperatureRor
         )
     }
 
     val chartData = listOf(
         ChartData(
-            points = beanTemperatureChartData,
-            chartAppearance = ChartAppearance(color = Color.Blue)
+            points = beanTemperatureRorChartData, chartAppearance = ChartAppearance(
+                color = Color.Blue.copy(alpha = 0.5f), onSecondAxis = true
+            )
         ),
         ChartData(
-            points = drumTemperatureChartData,
-            chartAppearance = ChartAppearance(color = Color.Green)
+            points = drumTemperatureRorChartData, chartAppearance = ChartAppearance(
+                color = Color.Green.copy(alpha = 0.5f), onSecondAxis = true
+            )
         ),
         ChartData(
-            points = airInletTemperatureChartData,
-            chartAppearance = ChartAppearance(color = Color.Red)
+            points = airInletTemperatureRorChartData, chartAppearance = ChartAppearance(
+                color = Color.Red.copy(alpha = 0.5f), onSecondAxis = true
+            )
         ),
         ChartData(
-            points = exhaustTemperatureChartData,
-            chartAppearance = ChartAppearance(color = Color.Yellow)
+            points = exhaustTemperatureRorChartData, chartAppearance = ChartAppearance(
+                color = Color.Yellow.copy(alpha = 0.5f), onSecondAxis = true
+            )
+        ),
+
+        ChartData(
+            points = drumTemperatureChartData, chartAppearance = ChartAppearance(
+                color = Color.Green.copy(alpha = 0.7f),
+            )
         ),
         ChartData(
-            points = beanTemperatureRorChartData,
-            chartAppearance = ChartAppearance(color = Color.Blue.copy(alpha = 0.8f), onSecondAxis = true)
+            points = airInletTemperatureChartData, chartAppearance = ChartAppearance(
+                color = Color.Red.copy(alpha = 0.7f),
+            )
         ),
         ChartData(
-            points = drumTemperatureRorChartData,
-            chartAppearance = ChartAppearance(color = Color.Green.copy(alpha = 0.8f), onSecondAxis = true)
+            points = exhaustTemperatureChartData, chartAppearance = ChartAppearance(
+                color = Color.Yellow.copy(alpha = 0.7f),
+            )
         ),
         ChartData(
-            points = airInletTemperatureRorChartData,
-            chartAppearance = ChartAppearance(color = Color.Red.copy(alpha = 0.8f), onSecondAxis = true)
+            points = beanTemperatureChartData, chartAppearance = ChartAppearance(
+                color = Color.Blue.copy(alpha = 0.7f),
+            )
         ),
-        ChartData(
-            points = exhaustTemperatureRorChartData,
-            chartAppearance = ChartAppearance(color = Color.Yellow.copy(alpha = 0.8f), onSecondAxis = true)
-        )
     )
 
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LineChart(
-            modifier = Modifier,
-            chartData = chartData,
-            graphAppearance = graphAppearance.value
+            modifier = Modifier, chartData = chartData, graphAppearance = graphAppearance.value
         )
     }
 }
@@ -181,9 +181,7 @@ fun RoastingGraph(
 
 @Composable
 fun LineChart(
-    modifier: Modifier,
-    chartData: List<ChartData> = listOf(),
-    graphAppearance: GraphAppearance
+    modifier: Modifier, chartData: List<ChartData> = listOf(), graphAppearance: GraphAppearance
 ) {
     val density = LocalDensity.current
     val tempTextPaint = remember(density) {
@@ -205,8 +203,7 @@ fun LineChart(
     Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surfaceBright)
-            .padding(horizontal = 32.dp, vertical = 12.dp),
-        contentAlignment = Alignment.Center
+            .padding(horizontal = 32.dp, vertical = 12.dp), contentAlignment = Alignment.Center
     ) {
         Canvas(
             modifier = Modifier.fillMaxSize(),
@@ -224,11 +221,8 @@ fun LineChart(
                 lineTo(endX, endY)
             }
             drawPath(
-                linePath,
-                color = graphAppearance.lineColor,
-                style = Stroke(
-                    width = graphAppearance.graphAxisThickness,
-                    cap = StrokeCap.Round
+                linePath, color = graphAppearance.lineColor, style = Stroke(
+                    width = graphAppearance.graphAxisThickness, cap = StrokeCap.Round
                 )
             )
 
@@ -255,11 +249,8 @@ fun LineChart(
                     lineTo(startX + xAxisSpace * i, endY)
                 }
                 drawPath(
-                    lineXPath,
-                    color = graphAppearance.lineColor.copy(alpha = 0.5f),
-                    style = Stroke(
-                        width = graphAppearance.graphAxisThickness / 2,
-                        cap = StrokeCap.Round
+                    lineXPath, color = graphAppearance.lineColor.copy(alpha = 0.5f), style = Stroke(
+                        width = graphAppearance.graphAxisThickness / 2, cap = StrokeCap.Round
                     )
                 )
             }
@@ -278,11 +269,8 @@ fun LineChart(
                     lineTo(endX, endY - yAxisSpace * i)
                 }
                 drawPath(
-                    lineYPath,
-                    color = graphAppearance.lineColor.copy(alpha = 0.5f),
-                    style = Stroke(
-                        width = graphAppearance.graphAxisThickness / 2,
-                        cap = StrokeCap.Round
+                    lineYPath, color = graphAppearance.lineColor.copy(alpha = 0.5f), style = Stroke(
+                        width = graphAppearance.graphAxisThickness / 2, cap = StrokeCap.Round
                     )
                 )
             }
@@ -303,11 +291,16 @@ fun LineChart(
 
                 val points = chart.points
                 val ySpace = if (chart.chartAppearance.onSecondAxis) y2AxisSpace else yAxisSpace
-
+                val lineThickness =
+                    if (chart.chartAppearance.onSecondAxis) graphAppearance.graphAxisThickness / 2 else chart.chartAppearance.lineThickness
                 /** placing our x axis points */
                 for (i in points.indices) {
+                    if (points[i].x < 0) continue
                     val x1 = startX + (xAxisSpace * points[i].x)
-                    val y1 = endY - (ySpace * points[i].y)
+                    val y1 = max(
+                        startY,
+                        min(endY, endY - (ySpace * points[i].y))
+                    )
                     coordinates.add(PointF(x1, y1))
                 }
 
@@ -315,20 +308,17 @@ fun LineChart(
                 for (i in 1 until coordinates.size) {
                     controlPoints1.add(
                         PointF(
-                            (coordinates[i].x + coordinates[i - 1].x) / 2,
-                            coordinates[i - 1].y
+                            (coordinates[i].x + coordinates[i - 1].x) / 2, coordinates[i - 1].y
                         )
                     )
                     controlPoints2.add(
                         PointF(
-                            (coordinates[i].x + coordinates[i - 1].x) / 2,
-                            coordinates[i].y
+                            (coordinates[i].x + coordinates[i - 1].x) / 2, coordinates[i].y
                         )
                     )
                 }
 
-                if (coordinates.isEmpty())
-                    continue
+                if (coordinates.isEmpty()) continue
 
                 /** drawing the path */
                 val stroke = Path().apply {
@@ -336,19 +326,23 @@ fun LineChart(
                     moveTo(coordinates.first().x, coordinates.first().y)
                     for (i in 1 until coordinates.size) {
                         cubicTo(
-                            controlPoints1[i - 1].x, controlPoints1[i - 1].y,
-                            controlPoints2[i - 1].x, controlPoints2[i - 1].y,
-                            coordinates[i].x, coordinates[i].y
+                            controlPoints1[i - 1].x,
+                            controlPoints1[i - 1].y,
+                            controlPoints2[i - 1].x,
+                            controlPoints2[i - 1].y,
+                            coordinates[i].x,
+                            coordinates[i].y
                         )
                     }
                 }
 
                 drawPath(
-                    stroke,
-                    color = chart.chartAppearance.color,
-                    style = Stroke(
+                    stroke, color = chart.chartAppearance.color, style = Stroke(
                         width = chart.chartAppearance.lineThickness,
-                        cap = StrokeCap.Round
+                        cap = StrokeCap.Round,
+                        pathEffect = if (chart.chartAppearance.onSecondAxis) PathEffect.dashPathEffect(
+                            floatArrayOf(5f, 5f)
+                        ) else null
                     )
                 )
             }
@@ -358,12 +352,11 @@ fun LineChart(
 }
 
 data class ChartData(
-    val points: List<PointF> = listOf(),
-    val chartAppearance: ChartAppearance
+    val points: List<PointF> = listOf(), val chartAppearance: ChartAppearance
 )
 
 data class ChartAppearance(
-    val lineThickness: Float = 4f,
+    val lineThickness: Float = 3f,
     val isColorAreaUnderChart: Boolean = false,
     val color: Color = Color.Red,
     val showPrediction: Boolean = false,
@@ -374,14 +367,14 @@ data class GraphAppearance(
     val backgroundColor: Color,
     val textColor: Color,
     val lineColor: Color,
-    val graphAxisThickness: Float = 4f,
+    val graphAxisThickness: Float = 2f,
     val textSize: TextUnit = 24.sp,
     val text2Size: TextUnit = 18.sp,
     val xMax: Int = 12,
     val xMin: Int = 0,
     val yMax: Float = 400f,
     val yMin: Float = 0f,
-    val y2Max: Float = 40f,
+    val y2Max: Float = 80f,
     val y2Min: Float = 0f,
     val paddingSpace: Dp = 64.dp,
     val horizontalStep: Int = 1,

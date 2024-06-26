@@ -1,9 +1,14 @@
 package coffee.hh.hbpeak.roasting
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.Snapshot.Companion.withMutableSnapshot
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
+import androidx.lifecycle.viewmodel.compose.saveable
 import coffee.hh.hbpeak.MachineState
 import coffee.hh.hbpeak.MachineStatus
 import kotlinx.coroutines.delay
@@ -29,18 +34,17 @@ data class SensorDataFrame(
     val point: SensorDataPoint
 )
 
-class RoastingGraphViewModel : ViewModel() {
-    private var _startTimer = System.currentTimeMillis()
-    private val _graphData: MutableStateFlow<List<SensorDataFrame>> = MutableStateFlow(listOf())
-    val graphData: StateFlow<List<SensorDataFrame>> = _graphData.asStateFlow()
+@OptIn(SavedStateHandleSaveableApi::class)
+class RoastingGraphViewModel(savedStateHandle: SavedStateHandle = SavedStateHandle()) : ViewModel() {
+    private var _startTimer by savedStateHandle.saveable {
+        mutableLongStateOf(System.currentTimeMillis())
+    }
+    var graphData: List<SensorDataFrame> by savedStateHandle.saveable {
+        mutableStateOf(listOf())
+    }
 
     init {
         print("Init RoastingGraphViewModel")
-        startTimer()
-    }
-
-    fun startTimer() {
-        resetTimer()
     }
 
     fun elapseMinutes(currentTime: Long): Float {
@@ -52,14 +56,20 @@ class RoastingGraphViewModel : ViewModel() {
         return elapseMinutes(currentTime)
     }
 
+    fun resetAll() {
+        resetTimer()
+        resetGraph()
+    }
+
     fun resetTimer() {
-        _startTimer = System.currentTimeMillis()
-        _graphData.value = listOf()
+        withMutableSnapshot {
+            _startTimer = System.currentTimeMillis()
+        }
     }
 
     fun dataFetching(machineState: MachineState) {
-        _graphData.update { current ->
-            val sensorDataFrames = current + SensorDataFrame(
+        withMutableSnapshot {
+            graphData += SensorDataFrame(
                 time = elapseMinutes(),
                 point = SensorDataPoint(
                     beanTemperature = machineState.beanTemperature,
@@ -72,25 +82,13 @@ class RoastingGraphViewModel : ViewModel() {
                     exhaustTemperatureRor = machineState.exhaustTemperatureRor
                 )
             )
-            sensorDataFrames
         }
+    }
 
-        when (machineState.status) {
-            MachineStatus.IDLE -> {
-
-            }
-
-            MachineStatus.ROASTING -> {
-
-            }
-
-            null -> {
-
-            }
+    private fun resetGraph() {
+        withMutableSnapshot {
+            graphData = listOf()
         }
     }
 }
 
-private fun resetGraph() {
-
-}
