@@ -16,17 +16,13 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Assessment
 import androidx.compose.material.icons.outlined.AutoGraph
 import androidx.compose.material.icons.outlined.DownloadDone
-import androidx.compose.material.icons.outlined.Fireplace
 import androidx.compose.material.icons.outlined.Folder
-import androidx.compose.material.icons.outlined.Inventory
 import androidx.compose.material.icons.outlined.LocalFireDepartment
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Power
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Wallpaper
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
