@@ -1,6 +1,7 @@
 package coffee.hh.hbpeak.composable
 
 import android.content.res.Configuration
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -49,8 +50,7 @@ fun SwitchWithLabel(
             .background(if(disabled) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainer)
             .clickable(
                 interactionSource = interactionSource,
-                // This is for removing ripple when Row is clicked
-                indication = null,
+                indication = LocalIndication.current,
                 role = Role.Switch,
                 onClick = {
                     if (!disabled) {
@@ -74,13 +74,6 @@ fun SwitchWithLabel(
             style = MaterialTheme.typography.headlineSmall,
             color = if(disabled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary,
         )
-//        Spacer(modifier = Modifier.padding(start = 8.dp))
-//        Switch(
-//            checked = state,
-//            onCheckedChange = {
-//                onStateChange(it)
-//            }
-//        )
     }
 }
 

@@ -24,6 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -181,7 +182,7 @@ fun RoastingContent(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(2f)
+                    .weight(1f)
                     .clip(MaterialTheme.shapes.medium), contentAlignment = Alignment.TopCenter
             ) {
                 RoastingGraph(
@@ -488,11 +489,11 @@ fun Timer(isStartRoasting: MutableState<Boolean>) {
     val startCounting = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(isStartRoasting) {
-        if (isStartRoasting.value && startCounting.value.not()) {
-            startCounting.value = true
-            roastingTime.value = 0
 
+    if (isStartRoasting.value && startCounting.value.not()) {
+        startCounting.value = true
+        roastingTime.value = 0
+        LaunchedEffect(isStartRoasting) {
             coroutineScope.launch {
                 while (isStartRoasting.value) {
                     roastingTime.value += 1
@@ -508,6 +509,8 @@ fun Timer(isStartRoasting: MutableState<Boolean>) {
 
     Text(
         text = String.format("%2d:%02d", minutes, seconds),
-        style = MaterialTheme.typography.displayMedium
+        style = MaterialTheme.typography.displayMedium,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.padding(16.dp).fillMaxWidth()
     )
 }
