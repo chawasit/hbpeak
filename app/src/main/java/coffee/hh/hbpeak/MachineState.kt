@@ -1,6 +1,7 @@
 package coffee.hh.hbpeak
 
 import java.time.Instant
+import java.time.LocalDateTime
 
 data class MachineState(
     val preheatTemperatureOnStatus: Boolean = false,
@@ -44,6 +45,6 @@ data class MachineState(
 )
 
 data class MachineError(
-    val time: Instant,
+    val time: LocalDateTime,
     val message: String
 )

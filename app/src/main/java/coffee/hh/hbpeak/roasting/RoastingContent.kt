@@ -33,7 +33,6 @@ import coffee.hh.hbpeak.MachineStateInterpreter
 import coffee.hh.hbpeak.composable.NumberPadDialog
 import coffee.hh.hbpeak.composable.SwitchWithLabel
 import coffee.hh.hbpeak.theme.HBPeakTheme
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @SuppressLint("DefaultLocale")
@@ -53,7 +52,6 @@ fun RoastingContent(
         mutableStateOf(false)
     }
     val coroutineScope = rememberCoroutineScope()
-
 
     when {
         showDialog.value -> {
@@ -290,6 +288,25 @@ fun RoastingContent(
                                 state = isStartRoasting.value,
                                 disabled = machineState.value.beanTemperature < machineState.value.preheatTemperature,
                                 onStateChange = {
+                                    if (!isStartRoasting.value) {
+                                        isStartRoasting.value = true
+
+                                        startRoasting(
+                                            coroutineScope,
+                                            machineState,
+                                            enqueueCommand,
+                                            roastingGraphViewModel,
+                                        )
+                                    } else {
+                                        isStartRoasting.value = false
+
+                                        endRoasting(
+                                            coroutineScope,
+                                            machineState,
+                                            enqueueCommand,
+                                            roastingGraphViewModel,
+                                        )
+                                    }
                                 }
                             )
                         }
@@ -315,7 +332,7 @@ fun RoastingContent(
                         item {
                             SwitchWithLabel(
                                 label = "Preheat",
-                                value = "${machineState.value.preheatTemperature.toInt()} C",
+                                value = if (!machineState.value.preheatTemperatureOnStatus) "OFF" else "${machineState.value.preheatTemperature.toInt()} C",
                                 state = machineState.value.preheatTemperatureOnStatus,
                                 onStateChange = {
                                     currentField.value = "Preheat Temperature"
@@ -331,7 +348,7 @@ fun RoastingContent(
                         item {
                             SwitchWithLabel(
                                 label = "Gas",
-                                value = "${if (machineState.value.gasOnStatus) machineState.value.gasLevel else "Off"} (${
+                                value = "${if (machineState.value.gasOnStatus) machineState.value.gasLevel else "OFF"} (${
                                     String.format(
                                         "%6.3f",
                                         machineState.value.gasPressure

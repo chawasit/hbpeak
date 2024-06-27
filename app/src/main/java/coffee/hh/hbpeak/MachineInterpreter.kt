@@ -4,7 +4,8 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import org.json.JSONObject
-import java.time.Instant
+import java.time.LocalDateTime
+import java.util.Calendar
 
 object MachineStateInterpreter {
 
@@ -133,6 +134,7 @@ object MachineStateInterpreter {
                                     )
                                 }
                             }
+
                             else -> {
                                 Log.e(
                                     "MachineStateInterpreter",
@@ -155,7 +157,7 @@ object MachineStateInterpreter {
                                 preheatTemperatureOnStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Preheat Failed"
+                                    LocalDateTime.now(), "Preheat Failed"
                                 )
                             )
 
@@ -163,7 +165,7 @@ object MachineStateInterpreter {
                                 gasOnStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Burner Ignition Failed"
+                                    LocalDateTime.now(), "Burner Ignition Failed"
                                 )
                             )
 
@@ -171,7 +173,7 @@ object MachineStateInterpreter {
                                 drumOnStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Drum Motor Failed"
+                                    LocalDateTime.now(), "Drum Motor Failed"
                                 )
                             )
 
@@ -179,7 +181,7 @@ object MachineStateInterpreter {
                                 fanOnStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Fan Motor Failed"
+                                    LocalDateTime.now(), "Fan Motor Failed"
                                 )
                             )
 
@@ -187,7 +189,7 @@ object MachineStateInterpreter {
                                 coolingTrayFanRunningStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Cooling Tray Fan Failed"
+                                    LocalDateTime.now(), "Cooling Tray Fan Failed"
                                 )
                             )
 
@@ -195,7 +197,7 @@ object MachineStateInterpreter {
                                 coolingTrayStirRunningStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Cooling Tray Stir Motor Failed"
+                                    LocalDateTime.now(), "Cooling Tray Stir Motor Failed"
                                 )
                             )
 
@@ -203,7 +205,7 @@ object MachineStateInterpreter {
                                 beanHolderOpenStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Bean Holder Failed"
+                                    LocalDateTime.now(), "Bean Holder Failed"
                                 )
                             )
 
@@ -211,7 +213,7 @@ object MachineStateInterpreter {
                                 drumDoorOpenStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Drum Door Failed"
+                                    LocalDateTime.now(), "Drum Door Failed"
                                 )
                             )
 
@@ -219,7 +221,7 @@ object MachineStateInterpreter {
                                 dropDoorOpenStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Drop Door Failed"
+                                    LocalDateTime.now(), "Drop Door Failed"
                                 )
                             )
 
@@ -227,7 +229,7 @@ object MachineStateInterpreter {
                                 loaderRunningStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Loader Failed"
+                                    LocalDateTime.now(), "Loader Failed"
                                 )
                             )
 
@@ -235,7 +237,7 @@ object MachineStateInterpreter {
                                 destonerRunningStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Destoner Failed"
+                                    LocalDateTime.now(), "Destoner Failed"
                                 )
                             )
 
@@ -243,7 +245,7 @@ object MachineStateInterpreter {
                                 exhaustFilterRunningStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Exhaust Filter Failed"
+                                    LocalDateTime.now(), "Exhaust Filter Failed"
                                 )
                             )
 
@@ -251,7 +253,7 @@ object MachineStateInterpreter {
                                 beanTemperatureStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Bean Temperature Sensor Failed"
+                                    LocalDateTime.now(), "Bean Temperature Sensor Failed"
                                 )
                             )
 
@@ -259,7 +261,7 @@ object MachineStateInterpreter {
                                 exhaustTemperatureStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Exhaust Temperature Sensor Failed"
+                                    LocalDateTime.now(), "Exhaust Temperature Sensor Failed"
                                 )
                             )
 
@@ -267,7 +269,7 @@ object MachineStateInterpreter {
                                 airInletTemperatureStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Air Inlet Temperature Sensor Failed"
+                                    LocalDateTime.now(), "Air Inlet Temperature Sensor Failed"
                                 )
                             )
 
@@ -275,7 +277,7 @@ object MachineStateInterpreter {
                                 drumTemperatureStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Drum Temperature Sensor Failed"
+                                    LocalDateTime.now(), "Drum Temperature Sensor Failed"
                                 )
                             )
 
@@ -283,7 +285,7 @@ object MachineStateInterpreter {
                                 airPressureStatus = machineStatusToBoolean(status),
                                 hasNewError = true,
                                 errors = newState.errors + MachineError(
-                                    Instant.now(), "Air Pressure Sensor Failed"
+                                    LocalDateTime.now(), "Air Pressure Sensor Failed"
                                 )
                             )
 
@@ -296,7 +298,7 @@ object MachineStateInterpreter {
                                     airPressureStatus = machineStatusToBoolean(status),
                                     hasNewError = true,
                                     errors = newState.errors + MachineError(
-                                        Instant.now(),
+                                        LocalDateTime.now(),
                                         "Unknown Error! Check Logs for detail."
                                     )
                                 )

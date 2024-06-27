@@ -95,7 +95,7 @@ class RoastingGraphViewModel(savedStateHandle: SavedStateHandle = SavedStateHand
         val minutes = floor(elapsedTime).toInt()
         val seconds = ((elapsedTime - minutes) * 60).toInt()
 
-        return "${minutes}:$seconds"
+        return "${minutes}:${seconds}"
     }
 }
 

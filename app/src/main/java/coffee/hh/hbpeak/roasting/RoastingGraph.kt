@@ -47,7 +47,7 @@ fun RoastingGraph(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val backgroundColor = MaterialTheme.colorScheme.surfaceBright
+    val backgroundColor = MaterialTheme.colorScheme.surfaceContainer
     val textColor = MaterialTheme.colorScheme.onSurface
     val lineColor = MaterialTheme.colorScheme.onSurface
 
@@ -61,15 +61,24 @@ fun RoastingGraph(
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {
-            roastingGraphViewModel.resetTimer()
             while (true) {
+                if (!machineState.value.roastingStatus) {
+                    roastingGraphViewModel.resetTimer()
+
+                    delay(1000)
+
+                    continue
+                }
+
                 roastingGraphViewModel.dataFetching(machineState.value)
-                if (graphAppearance.value.xMax < roastingGraphViewModel.elapseMinutes() - 2) {
+
+                if (graphAppearance.value.xMax.toFloat() - 1.5f < roastingGraphViewModel.elapseMinutes()
+                ) {
                     graphAppearance.value = graphAppearance.value.copy(
-                        xMax = roastingGraphViewModel.elapseMinutes().toInt() + 2
+                        xMax = graphAppearance.value.xMax + 2
                     )
                 }
-                delay(1000)
+                delay(500)
             }
         }
     }
@@ -239,7 +248,7 @@ fun LineChart(
             /** placing x axis points */
             for (i in (graphAppearance.xMin..graphAppearance.xMax step graphAppearance.horizontalStep)) {
                 drawContext.canvas.nativeCanvas.drawText(
-                    "$i",
+                    "${i}:00",
                     startX + xAxisSpace * (i),
                     size.height - graphAppearance.paddingSpace.toPx() / 4,
                     tempTextPaint
@@ -252,7 +261,11 @@ fun LineChart(
                 }
                 drawPath(
                     lineXPath, color = graphAppearance.lineColor.copy(alpha = 0.5f), style = Stroke(
-                        width = graphAppearance.graphAxisThickness / 2, cap = StrokeCap.Round
+                        width = graphAppearance.graphAxisThickness / 2,
+                        cap = StrokeCap.Round,
+                        pathEffect = PathEffect.dashPathEffect(
+                            floatArrayOf(10f, 10f)
+                        )
                     )
                 )
             }
@@ -272,14 +285,18 @@ fun LineChart(
                 }
                 drawPath(
                     lineYPath, color = graphAppearance.lineColor.copy(alpha = 0.5f), style = Stroke(
-                        width = graphAppearance.graphAxisThickness / 2, cap = StrokeCap.Round
+                        width = graphAppearance.graphAxisThickness / 2,
+                        cap = StrokeCap.Round,
+                        pathEffect = PathEffect.dashPathEffect(
+                            floatArrayOf(10f, 10f)
+                        )
                     )
                 )
             }
             /** placing y2 axis points */
             for (i in (graphAppearance.y2Min.toInt()..graphAppearance.y2Max.toInt() step graphAppearance.verticalStep2)) {
                 drawContext.canvas.nativeCanvas.drawText(
-                    "${i} c/min",
+                    "$i c/min",
                     size.width - graphAppearance.paddingSpace.toPx() / 4f,
                     endY - y2AxisSpace * i + graphAppearance.textSize.toPx() / 4,
                     rorTextPaint
@@ -339,14 +356,15 @@ fun LineChart(
                     reset()
                     moveTo(coordinates.first().x, coordinates.first().y)
                     for (i in 1 until coordinates.size) {
-                        cubicTo(
-                            controlPoints1[i - 1].x,
-                            controlPoints1[i - 1].y,
-                            controlPoints2[i - 1].x,
-                            controlPoints2[i - 1].y,
-                            coordinates[i].x,
-                            coordinates[i].y
-                        )
+//                        cubicTo(
+//                            controlPoints1[i - 1].x,
+//                            controlPoints1[i - 1].y,
+//                            controlPoints2[i - 1].x,
+//                            controlPoints2[i - 1].y,
+//                            coordinates[i].x,
+//                            coordinates[i].y
+//                        )
+                        lineTo(coordinates[i].x, coordinates[i].y)
                     }
                 }
 

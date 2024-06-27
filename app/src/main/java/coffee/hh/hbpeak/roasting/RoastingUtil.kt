@@ -14,68 +14,61 @@ fun startRoasting(
     machineState: MutableState<MachineState>,
     enqueueCommand: (String) -> Unit,
     roastingGraphViewModel: RoastingGraphViewModel,
-    isStartRoasting: MutableState<Boolean>
 ) {
     coroutineScope.launch {
-        if (!isStartRoasting.value) {
-            isStartRoasting.value = true
 
-            enqueueCommand(
-                MachineStateInterpreter.generateControlCommand(
-                    machineState.value,
-                    MachineControlUnitIds.DRUM_DOOR,
-                    MachineNodeStatus.OFF,
-                )
+        enqueueCommand(
+            MachineStateInterpreter.generateControlCommand(
+                machineState.value,
+                MachineControlUnitIds.DRUM_DOOR,
+                MachineNodeStatus.OFF,
             )
+        )
 
-            enqueueCommand(
-                MachineStateInterpreter.generateControlCommand(
-                    machineState.value,
-                    MachineControlUnitIds.ROASTING_STATUS,
-                    MachineNodeStatus.ON,
-                )
+        enqueueCommand(
+            MachineStateInterpreter.generateControlCommand(
+                machineState.value,
+                MachineControlUnitIds.ROASTING_STATUS,
+                MachineNodeStatus.ON,
             )
+        )
 
-            enqueueCommand(
-                MachineStateInterpreter.generateControlCommand(
-                    machineState.value,
-                    MachineControlUnitIds.BEAN_HOLDER,
-                    MachineNodeStatus.ON
-                )
+        enqueueCommand(
+            MachineStateInterpreter.generateControlCommand(
+                machineState.value,
+                MachineControlUnitIds.BEAN_HOLDER,
+                MachineNodeStatus.ON
             )
+        )
 
-            enqueueCommand(
-                MachineStateInterpreter.generateControlCommand(
-                    machineState.value,
-                    MachineControlUnitIds.PREHEAT_TEMPERATURE,
-                    MachineNodeStatus.OFF
-                )
+        enqueueCommand(
+            MachineStateInterpreter.generateControlCommand(
+                machineState.value,
+                MachineControlUnitIds.PREHEAT_TEMPERATURE,
+                MachineNodeStatus.OFF
             )
+        )
 
-            enqueueCommand(
-                MachineStateInterpreter.generateControlCommand(
-                    machineState.value,
-                    MachineControlUnitIds.GAS_LEVEL,
-                    MachineNodeStatus.ON,
-                    20
-                )
+        enqueueCommand(
+            MachineStateInterpreter.generateControlCommand(
+                machineState.value,
+                MachineControlUnitIds.GAS_LEVEL,
+                MachineNodeStatus.ON,
+                20
             )
+        )
 
-            roastingGraphViewModel.startRoasting()
+        roastingGraphViewModel.startRoasting()
 
-            delay(15 * 1000)
+        delay(15 * 1000)
 
-            enqueueCommand(
-                MachineStateInterpreter.generateControlCommand(
-                    machineState.value,
-                    MachineControlUnitIds.BEAN_HOLDER,
-                    MachineNodeStatus.OFF
-                )
+        enqueueCommand(
+            MachineStateInterpreter.generateControlCommand(
+                machineState.value,
+                MachineControlUnitIds.BEAN_HOLDER,
+                MachineNodeStatus.OFF
             )
-        } else {
-
-        }
-
+        )
     }
 }
 
@@ -84,7 +77,6 @@ fun endRoasting(
     machineState: MutableState<MachineState>,
     enqueueCommand: (String) -> Unit,
     roastingGraphViewModel: RoastingGraphViewModel,
-    isStartRoasting: MutableState<Boolean>
 ) {
     coroutineScope.launch {
         enqueueCommand(
