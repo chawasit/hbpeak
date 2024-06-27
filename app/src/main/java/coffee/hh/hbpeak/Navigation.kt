@@ -45,7 +45,7 @@ fun HBPeakNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = WELCOME_ROUTE,
+        startDestination = HOME_ROUTE,
         enterTransition = { fadeIn(tween(400)) },
         exitTransition = { fadeOut(tween(300)) }
     ) {

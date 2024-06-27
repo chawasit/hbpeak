@@ -15,6 +15,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -487,16 +488,18 @@ fun Timer(isStartRoasting: MutableState<Boolean>) {
     val startCounting = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
-    if (isStartRoasting.value && startCounting.value.not()) {
-        startCounting.value = true
-        roastingTime.value = 0
+    LaunchedEffect(isStartRoasting) {
+        if (isStartRoasting.value && startCounting.value.not()) {
+            startCounting.value = true
+            roastingTime.value = 0
 
-        coroutineScope.launch {
-            while (isStartRoasting.value) {
-                roastingTime.value += 1
-                delay(1000)
+            coroutineScope.launch {
+                while (isStartRoasting.value) {
+                    roastingTime.value += 1
+                    delay(1000)
+                }
+                startCounting.value = false
             }
-            startCounting.value = false
         }
     }
 
