@@ -11,12 +11,9 @@ import kotlinx.coroutines.launch
 
 fun startRoasting(
     coroutineScope: CoroutineScope,
-    machineState: MutableState<MachineState>,
     enqueueCommand: (String) -> Unit,
-    roastingGraphViewModel: RoastingGraphViewModel,
 ) {
     coroutineScope.launch {
-
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
                 MachineControlUnitIds.DRUM_DOOR,
@@ -53,8 +50,6 @@ fun startRoasting(
             )
         )
 
-        roastingGraphViewModel.startRoasting()
-
         delay(15 * 1000)
 
         enqueueCommand(
@@ -68,9 +63,7 @@ fun startRoasting(
 
 fun endRoasting(
     coroutineScope: CoroutineScope,
-    machineState: MutableState<MachineState>,
     enqueueCommand: (String) -> Unit,
-    roastingGraphViewModel: RoastingGraphViewModel,
 ) {
     coroutineScope.launch {
         enqueueCommand(

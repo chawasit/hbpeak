@@ -33,6 +33,7 @@ import coffee.hh.hbpeak.MachineStateInterpreter
 import coffee.hh.hbpeak.composable.NumberPadDialog
 import coffee.hh.hbpeak.composable.SwitchWithLabel
 import coffee.hh.hbpeak.theme.HBPeakTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @SuppressLint("DefaultLocale")
@@ -182,12 +183,12 @@ fun RoastingContent(
                     .weight(2f)
                     .clip(MaterialTheme.shapes.medium), contentAlignment = Alignment.TopCenter
             ) {
-                RoastingGraph(machineState, roastingGraphViewModel)
-                Text(
-                    text =
-                    if (isStartRoasting.value) roastingGraphViewModel.getFormattedTime() else "",
-                    style = MaterialTheme.typography.displayMedium
+                RoastingGraph(
+                    machineState,
+                    isStartRoasting = isStartRoasting,
+                    roastingGraphViewModel
                 )
+                Timer(isStartRoasting)
             }
 
             LazyVerticalGrid(
@@ -284,18 +285,16 @@ fun RoastingContent(
 
                                         startRoasting(
                                             coroutineScope,
-                                            machineState,
                                             enqueueCommand,
-                                            roastingGraphViewModel,
                                         )
+
+                                        roastingGraphViewModel.startRoasting()
                                     } else {
                                         isStartRoasting.value = false
 
                                         endRoasting(
                                             coroutineScope,
-                                            machineState,
                                             enqueueCommand,
-                                            roastingGraphViewModel,
                                         )
                                     }
                                 }
@@ -480,4 +479,32 @@ fun RoastingContentPreview() {
     HBPeakTheme {
         RoastingContent()
     }
+}
+
+@Composable
+fun Timer(isStartRoasting: MutableState<Boolean>) {
+    val roastingTime = remember { mutableStateOf(0) }
+    val startCounting = remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
+    if (isStartRoasting.value && startCounting.value.not()) {
+        startCounting.value = true
+        roastingTime.value = 0
+
+        coroutineScope.launch {
+            while (isStartRoasting.value) {
+                roastingTime.value += 1
+                delay(1000)
+            }
+            startCounting.value = false
+        }
+    }
+
+    val minutes = roastingTime.value / 60
+    val seconds = roastingTime.value % 60
+
+    Text(
+        text = String.format("%2d:%02d", minutes, seconds),
+        style = MaterialTheme.typography.displayMedium
+    )
 }

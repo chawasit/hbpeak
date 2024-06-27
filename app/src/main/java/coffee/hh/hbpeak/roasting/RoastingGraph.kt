@@ -43,6 +43,7 @@ import kotlin.math.min
 @Composable
 fun RoastingGraph(
     machineState: MutableState<MachineState> = mutableStateOf(MachineState()),
+    isStartRoasting: MutableState<Boolean> = mutableStateOf(false),
     roastingGraphViewModel: RoastingGraphViewModel = viewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -62,7 +63,7 @@ fun RoastingGraph(
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             while (true) {
-                if (!machineState.value.roastingStatus) {
+                if (!isStartRoasting.value) {
                     roastingGraphViewModel.resetTimer()
 
                     delay(1000)
@@ -248,7 +249,7 @@ fun LineChart(
             /** placing x axis points */
             for (i in (graphAppearance.xMin..graphAppearance.xMax step graphAppearance.horizontalStep)) {
                 drawContext.canvas.nativeCanvas.drawText(
-                    "${i}:00",
+                    "${i}",
                     startX + xAxisSpace * (i),
                     size.height - graphAppearance.paddingSpace.toPx() / 4,
                     tempTextPaint
