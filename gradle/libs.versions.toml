@@ -25,6 +25,7 @@ uiTextGoogleFonts = "1.6.8"
 coreSplashscreen = "1.0.1"
 vico = "2.0.0-alpha.21"
 lifecycleRuntimeComposeAndroid = "2.8.2"
+datastoreCoreAndroid = "1.1.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -77,6 +78,7 @@ vico-core = { group = "com.patrykandpatrick.vico", name = "core", version.ref = 
 # For the view system.
 vico-views = { group = "com.patrykandpatrick.vico", name = "views", version.ref = "vico" }
 androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeComposeAndroid" }
+androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -121,10 +121,18 @@ object MachineStateInterpreter {
                                 hmiRelayStatus = machineStatusToBoolean(status)
                             )
 
-                            MachineControlUnitIds.ROASTING_STATUS -> newState.copy(
-                                roastingStatus = machineStatusToBoolean(status)
-                            )
+                            MachineControlUnitIds.ROASTING_STATUS -> {
+                                val roastStatus = machineStatusToBoolean(status)
 
+                                if (roastStatus == currentState.roastingStatus) {
+                                    newState
+                                } else {
+                                    newState.copy(
+                                        roastingStatus = roastStatus,
+                                        startRoastingTime = System.currentTimeMillis()
+                                    )
+                                }
+                            }
                             else -> {
                                 Log.e(
                                     "MachineStateInterpreter",
@@ -295,8 +303,11 @@ object MachineStateInterpreter {
                             }
                         }
                     }
+
+                    Log.e("MachineStateInterpreter", "Got Error: ${newState.errors}")
                 }
             }
+
             return newState
         } catch (e: Exception) {
             Log.e("MachineStateInterpreter", e.message ?: "Unknown error")
@@ -346,6 +357,7 @@ object MachineStateInterpreter {
             MachineControlUnitIds.DRUM_TEMPERATURE,
             MachineControlUnitIds.AIR_PRESSURE,
             MachineControlUnitIds.GAS_PRESSURE,
+            MachineControlUnitIds.ROASTING_STATUS
         )
 
         val commandList = statusRequestTargets.map { target ->

@@ -17,7 +17,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
@@ -36,7 +35,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+val Context.dataStore: DataStore<androidx.datastore.preferences.core.Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webSocketServer: NettyApplicationEngine
@@ -80,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         initSerial()
 
         // send start sequence to the machine
-        sendStartSequence()
+//        sendStartSequence()
 
         // Start routine to request machine status
         startStatusRequestRoutine()

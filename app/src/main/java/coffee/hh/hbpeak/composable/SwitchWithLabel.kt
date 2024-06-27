@@ -27,6 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coffee.hh.hbpeak.theme.HBPeakTheme
+import com.google.android.material.color.MaterialColorUtilitiesHelper
+import com.google.android.material.color.MaterialColors
 
 
 @Composable
@@ -35,42 +37,48 @@ fun SwitchWithLabel(
     label: String = "text",
     value: String = "",
     state: Boolean = false,
+    disabled: Boolean = false,
     onStateChange: (Boolean) -> Unit = {},
 ) {
 
     val interactionSource = remember { MutableInteractionSource() }
-    Row(modifier = modifier
-        .width(IntrinsicSize.Max)
-        .border(
-            2.dp,
-            if (state) MaterialTheme.colorScheme.inversePrimary else MaterialTheme.colorScheme.inverseOnSurface,
-            shape = MaterialTheme.shapes.medium
-        )
-        .clip(MaterialTheme.shapes.medium)
-        .background(MaterialTheme.colorScheme.surfaceBright)
-        .clickable(
-            interactionSource = interactionSource,
-            // This is for removing ripple when Row is clicked
-            indication = null,
-            role = Role.Switch,
-            onClick = {
-                onStateChange(!state)
-            }
-        )
-        .padding(16.dp, 16.dp),
+    Row(
+        modifier = modifier
+            .width(IntrinsicSize.Max)
+            .border(
+                2.dp,
+                if(disabled) MaterialTheme.colorScheme.scrim else
+                if (state) MaterialTheme.colorScheme.inversePrimary else MaterialTheme.colorScheme.inverseOnSurface,
+                shape = MaterialTheme.shapes.medium
+            )
+            .clip(MaterialTheme.shapes.medium)
+            .background(if(disabled) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainer)
+            .clickable(
+                interactionSource = interactionSource,
+                // This is for removing ripple when Row is clicked
+                indication = null,
+                role = Role.Switch,
+                onClick = {
+                    if (!disabled) {
+                        onStateChange(!state)
+                    }
+                }
+
+            )
+            .padding(16.dp, 16.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
             text = label, style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = if(disabled) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(1f)
         )
         Text(
             text = value,
             textAlign = TextAlign.End,
             style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.primary,
+            color = if(disabled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary,
         )
 //        Spacer(modifier = Modifier.padding(start = 8.dp))
 //        Switch(
@@ -98,6 +106,13 @@ fun SwitchWithLabelPreview() {
                 label = "Switch",
                 value = "value",
                 state = false,
+                onStateChange = {}
+            )
+            SwitchWithLabel(
+                label = "Switch",
+                value = "value",
+                state = false,
+                disabled = true,
                 onStateChange = {}
             )
         }

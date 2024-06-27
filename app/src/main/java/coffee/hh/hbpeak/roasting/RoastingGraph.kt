@@ -64,7 +64,7 @@ fun RoastingGraph(
             roastingGraphViewModel.resetTimer()
             while (true) {
                 roastingGraphViewModel.dataFetching(machineState.value)
-                if (graphAppearance.value.xMax < roastingGraphViewModel.elapseMinutes() - 1) {
+                if (graphAppearance.value.xMax < roastingGraphViewModel.elapseMinutes() - 2) {
                     graphAppearance.value = graphAppearance.value.copy(
                         xMax = roastingGraphViewModel.elapseMinutes().toInt() + 2
                     )

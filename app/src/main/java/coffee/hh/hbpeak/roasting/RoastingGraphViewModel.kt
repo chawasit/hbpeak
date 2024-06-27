@@ -1,5 +1,6 @@
 package coffee.hh.hbpeak.roasting
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.Snapshot.Companion.withMutableSnapshot
@@ -8,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import coffee.hh.hbpeak.MachineState
+import kotlin.math.floor
 
 data class SensorDataPoint(
     val beanTemperature: Float,
@@ -85,6 +87,15 @@ class RoastingGraphViewModel(savedStateHandle: SavedStateHandle = SavedStateHand
         withMutableSnapshot {
             graphData = listOf()
         }
+    }
+
+    @Composable
+    fun getFormattedTime(): String {
+        val elapsedTime = elapseMinutes()
+        val minutes = floor(elapsedTime).toInt()
+        val seconds = ((elapsedTime - minutes) * 60).toInt()
+
+        return "${minutes}:$seconds"
     }
 }
 

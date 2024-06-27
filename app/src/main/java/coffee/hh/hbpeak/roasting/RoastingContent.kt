@@ -49,7 +49,11 @@ fun RoastingContent(
     val minValue = remember { mutableIntStateOf(0) }
     val currentField = remember { mutableStateOf("") }
     val currentValue = remember { mutableStateOf("") }
+    val isStartRoasting = remember {
+        mutableStateOf(false)
+    }
     val coroutineScope = rememberCoroutineScope()
+
 
     when {
         showDialog.value -> {
@@ -179,17 +183,22 @@ fun RoastingContent(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(2f)
-                    .clip(MaterialTheme.shapes.medium)
-                , contentAlignment = Alignment.TopCenter
+                    .clip(MaterialTheme.shapes.medium), contentAlignment = Alignment.TopCenter
             ) {
                 RoastingGraph(machineState, roastingGraphViewModel)
-                Text(text = "[Timer]", style = MaterialTheme.typography.displayMedium)
+                Text(
+                    text =
+                    if (isStartRoasting.value) roastingGraphViewModel.getFormattedTime() else "",
+                    style = MaterialTheme.typography.displayMedium
+                )
             }
 
             LazyVerticalGrid(
@@ -277,102 +286,10 @@ fun RoastingContent(
 
                         item {
                             SwitchWithLabel(
-                                label = if (machineState.value.roastingStatus) "END ROAST" else "START ROAST",
-                                state = machineState.value.roastingStatus,
+                                label = if (isStartRoasting.value) "END ROAST" else "START ROAST",
+                                state = isStartRoasting.value,
+                                disabled = machineState.value.beanTemperature < machineState.value.preheatTemperature,
                                 onStateChange = {
-                                    coroutineScope.launch {
-                                        if (machineState.value.roastingStatus) {
-                                            enqueueCommand(MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
-                                                MachineControlUnitIds.DRUM_DOOR,
-                                                MachineNodeStatus.OFF,
-                                            ))
-
-                                            enqueueCommand(MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
-                                                MachineControlUnitIds.ROASTING_STATUS,
-                                                MachineNodeStatus.ON,
-                                            ))
-
-                                            enqueueCommand(MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
-                                                MachineControlUnitIds.BEAN_HOLDER,
-                                                MachineNodeStatus.ON
-                                            ))
-
-                                            enqueueCommand(MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
-                                                MachineControlUnitIds.PREHEAT_TEMPERATURE,
-                                                MachineNodeStatus.OFF
-                                            ))
-
-                                            enqueueCommand(MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
-                                                MachineControlUnitIds.GAS_LEVEL,
-                                                MachineNodeStatus.ON,
-                                                20
-                                            ))
-
-                                            roastingGraphViewModel.startRoasting()
-
-                                            delay(20 * 1000)
-
-                                            enqueueCommand(MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
-                                                MachineControlUnitIds.BEAN_HOLDER,
-                                                MachineNodeStatus.OFF,
-                                                0
-                                            ))
-
-                                        } else {
-                                            enqueueCommand(MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
-                                                MachineControlUnitIds.ROASTING_STATUS,
-                                                MachineNodeStatus.OFF,
-                                            ))
-
-                                            enqueueCommand(MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
-                                                MachineControlUnitIds.FAN_LEVEL,
-                                                MachineNodeStatus.ON,
-                                                90
-                                            ))
-
-                                            enqueueCommand(MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
-                                                MachineControlUnitIds.COOLING_TRAY_FAN,
-                                                MachineNodeStatus.ON
-                                            ))
-
-                                            enqueueCommand(MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
-                                                MachineControlUnitIds.COOLING_TRAY_STIR,
-                                                MachineNodeStatus.ON
-                                            ))
-
-                                            enqueueCommand(MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
-                                                MachineControlUnitIds.DRUM_DOOR,
-                                                MachineNodeStatus.ON
-                                            ))
-
-                                            // Repeat Off Status
-                                            enqueueCommand(MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
-                                                MachineControlUnitIds.ROASTING_STATUS,
-                                                MachineNodeStatus.OFF,
-                                            ))
-
-                                            delay(60 * 1000)
-
-                                            enqueueCommand(MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
-                                                MachineControlUnitIds.DRUM_DOOR,
-                                                MachineNodeStatus.OFF
-                                            ))
-                                        }
-
-                                    }
                                 }
                             )
                         }
@@ -414,7 +331,12 @@ fun RoastingContent(
                         item {
                             SwitchWithLabel(
                                 label = "Gas",
-                                value = "${machineState.value.gasLevel} (${String.format("%5.3f",machineState.value.gasPressure)} Pa)",
+                                value = "${if (machineState.value.gasOnStatus) machineState.value.gasLevel else "Off"} (${
+                                    String.format(
+                                        "%6.3f",
+                                        machineState.value.gasPressure
+                                    )
+                                } Pa)",
                                 state = machineState.value.gasOnStatus,
                                 onStateChange = {
                                     currentField.value = "Gas Level"
@@ -428,7 +350,7 @@ fun RoastingContent(
                         item {
                             SwitchWithLabel(
                                 label = "Air",
-                                value = "${machineState.value.fanLevel} (${String.format("%-3.0f",machineState.value.airPressure)} Pa)",
+                                value = "${machineState.value.fanLevel} (${machineState.value.airPressure} Pa)",
                                 state = machineState.value.fanOnStatus,
                                 onStateChange = {
                                     currentField.value = "Air Speed"
@@ -533,8 +455,22 @@ fun RoastingContent(
     }
 }
 
-@Preview(name = "Roasting light theme", widthDp = 1200, heightDp = 1920, showBackground = true, apiLevel = 34, uiMode = UI_MODE_NIGHT_NO)
-@Preview(name = "Roasting dark theme", widthDp = 1200, heightDp = 1920, showBackground = true, apiLevel = 34, uiMode = UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Roasting light theme",
+    widthDp = 1200,
+    heightDp = 1920,
+    showBackground = true,
+    apiLevel = 34,
+    uiMode = UI_MODE_NIGHT_NO
+)
+@Preview(
+    name = "Roasting dark theme",
+    widthDp = 1200,
+    heightDp = 1920,
+    showBackground = true,
+    apiLevel = 34,
+    uiMode = UI_MODE_NIGHT_YES
+)
 @Composable
 fun RoastingContentPreview() {
     HBPeakTheme {
