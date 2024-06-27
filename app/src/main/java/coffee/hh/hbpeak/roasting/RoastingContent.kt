@@ -67,7 +67,6 @@ fun RoastingContent(
                         "Drum RPM" -> {
                             coroutineScope.launch {
                                 val command = MachineStateInterpreter.generateControlCommand(
-                                    machineState.value,
                                     MachineControlUnitIds.DRUM_RPM,
                                     if (value.toInt() == 0) MachineNodeStatus.OFF else MachineNodeStatus.ON,
                                     value.toInt()
@@ -79,7 +78,6 @@ fun RoastingContent(
                         "Air Speed" -> {
                             coroutineScope.launch {
                                 val command = MachineStateInterpreter.generateControlCommand(
-                                    machineState.value,
                                     MachineControlUnitIds.FAN_LEVEL,
                                     if (value.toInt() == 0) MachineNodeStatus.OFF else MachineNodeStatus.ON,
                                     value.toInt()
@@ -91,7 +89,6 @@ fun RoastingContent(
                         "Preheat Temperature" -> {
                             coroutineScope.launch {
                                 val command = MachineStateInterpreter.generateControlCommand(
-                                    machineState.value,
                                     MachineControlUnitIds.PREHEAT_TEMPERATURE,
                                     if (value.toInt() == 0) MachineNodeStatus.OFF else MachineNodeStatus.ON,
                                     value.toInt()
@@ -103,7 +100,6 @@ fun RoastingContent(
                         "Gas Level" -> {
                             coroutineScope.launch {
                                 val command = MachineStateInterpreter.generateControlCommand(
-                                    machineState.value,
                                     MachineControlUnitIds.GAS_LEVEL,
                                     if (value.toInt() == 0) MachineNodeStatus.OFF else MachineNodeStatus.ON,
                                     value.toInt()
@@ -119,7 +115,6 @@ fun RoastingContent(
                         "Drum RPM" -> {
                             coroutineScope.launch {
                                 val command = MachineStateInterpreter.generateControlCommand(
-                                    machineState.value,
                                     MachineControlUnitIds.DRUM_RPM,
                                     MachineNodeStatus.OFF,
                                     value.toInt()
@@ -131,7 +126,6 @@ fun RoastingContent(
                         "Air Speed" -> {
                             coroutineScope.launch {
                                 val command = MachineStateInterpreter.generateControlCommand(
-                                    machineState.value,
                                     MachineControlUnitIds.FAN_LEVEL,
                                     MachineNodeStatus.OFF,
                                     value.toInt()
@@ -144,7 +138,6 @@ fun RoastingContent(
                             coroutineScope.launch {
                                 val offPreheatCommand =
                                     MachineStateInterpreter.generateControlCommand(
-                                        machineState.value,
                                         MachineControlUnitIds.PREHEAT_TEMPERATURE,
                                         MachineNodeStatus.OFF,
                                         value.toInt()
@@ -152,7 +145,6 @@ fun RoastingContent(
 
                                 val offBurnerCommand =
                                     MachineStateInterpreter.generateControlCommand(
-                                        machineState.value,
                                         MachineControlUnitIds.GAS_LEVEL,
                                         MachineNodeStatus.OFF,
                                         0
@@ -165,7 +157,6 @@ fun RoastingContent(
                         "Gas Level" -> {
                             coroutineScope.launch {
                                 val command = MachineStateInterpreter.generateControlCommand(
-                                    machineState.value,
                                     MachineControlUnitIds.GAS_LEVEL,
                                     MachineNodeStatus.OFF,
                                     value.toInt()
@@ -402,7 +393,6 @@ fun RoastingContent(
                                     coroutineScope.launch {
                                         val command =
                                             MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
                                                 MachineControlUnitIds.DRUM_DOOR,
                                                 if (it) MachineNodeStatus.ON else MachineNodeStatus.OFF,
                                                 0
@@ -420,7 +410,6 @@ fun RoastingContent(
                                     coroutineScope.launch {
                                         val command =
                                             MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
                                                 MachineControlUnitIds.BEAN_HOLDER,
                                                 if (it) MachineNodeStatus.ON else MachineNodeStatus.OFF,
                                                 0
@@ -438,7 +427,6 @@ fun RoastingContent(
                                     coroutineScope.launch {
                                         val command =
                                             MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
                                                 MachineControlUnitIds.COOLING_TRAY_FAN,
                                                 if (it) MachineNodeStatus.ON else MachineNodeStatus.OFF,
                                                 0
@@ -456,7 +444,6 @@ fun RoastingContent(
                                     coroutineScope.launch {
                                         val command =
                                             MachineStateInterpreter.generateControlCommand(
-                                                machineState.value,
                                                 MachineControlUnitIds.COOLING_TRAY_STIR,
                                                 if (it) MachineNodeStatus.ON else MachineNodeStatus.OFF,
                                                 0

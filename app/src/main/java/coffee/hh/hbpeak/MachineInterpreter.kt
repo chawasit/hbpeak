@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import org.json.JSONObject
 import java.time.LocalDateTime
-import java.util.Calendar
 
 object MachineStateInterpreter {
 
@@ -319,20 +318,16 @@ object MachineStateInterpreter {
     }
 
     fun generateControlCommand(
-        currentState: MachineState,
         target: Int,
-        status: String,
-        value: Int = 0
+        status: String? = null,
+        value: Int? = 0
     ): String {
+        val commandObject = mapOf("t" to target)
+        if (status != null) commandObject.entries.plus("s" to status)
+        if (value != null) commandObject.entries.plus("v" to value)
+
         val commandList = listOf(
-            mapOf(
-                "t" to target,
-                "s" to status,
-                "v" to when (target) {
-                    MachineControlUnitIds.GAS_LEVEL -> value * 10
-                    else -> value
-                }
-            )
+            commandObject
         )
         val command = mapOf(
             "m" to MachineMessageTypes.CONTROL,

@@ -79,12 +79,13 @@ class MainActivity : AppCompatActivity() {
         initSerial()
 
         // send start sequence to the machine
-//        sendStartSequence()
+        sendStartSequence()
 
         // Start routine to request machine status
         startStatusRequestRoutine()
 
         setContent {
+            @Suppress("LocalVariableName")
             val USE_DARK_THEME = booleanPreferencesKey("use_dark_theme")
             val useDarkThemeSetting: Flow<Boolean> = dataStore.data
                 .map { preferences ->
@@ -178,15 +179,12 @@ class MainActivity : AppCompatActivity() {
         coroutineScope.launch {
             enqueueCommand(
                 MachineStateInterpreter.generateControlCommand(
-                    machineState.value,
                     MachineControlUnitIds.POWER_ON,
-                    MachineNodeStatus.ON
                 )
             )
 
             enqueueCommand(
                 MachineStateInterpreter.generateControlCommand(
-                    machineState.value,
                     MachineControlUnitIds.HMI_RELAY,
                     MachineNodeStatus.ON
                 )

@@ -65,7 +65,7 @@ fun SwitchWithLabel(
                 }
 
             )
-            .padding(16.dp, 16.dp),
+            .padding(16.dp, 24.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {

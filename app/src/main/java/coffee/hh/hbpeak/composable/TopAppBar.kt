@@ -43,7 +43,7 @@ fun TopAppBar(
                     imageVector = Filled.ChevronLeft,
                     contentDescription = stringResource(id = R.string.back),
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(64.dp)
+                    modifier = Modifier.size(240.dp)
                 )
             }
         },
@@ -53,7 +53,7 @@ fun TopAppBar(
                     imageVector = Filled.Contrast,
                     contentDescription = stringResource(R.string.toggle_dark_theme),
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(64.dp)
+                    modifier = Modifier.size(120.dp)
                 )
             }
         },

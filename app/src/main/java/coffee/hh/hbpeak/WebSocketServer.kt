@@ -112,7 +112,6 @@ class WebSocketServer(
         Log.i("WebSocketServer", "Handle Control Params: $params")
         params.forEach { (nodeName, requestValue) ->
             val command = MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 websocketNameMapping[nodeName]!!,
                 if (requestValue > 0) MachineNodeStatus.ON else MachineNodeStatus.OFF,
                 requestValue

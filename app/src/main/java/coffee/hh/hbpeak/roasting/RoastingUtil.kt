@@ -19,7 +19,6 @@ fun startRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.DRUM_DOOR,
                 MachineNodeStatus.OFF,
             )
@@ -27,7 +26,6 @@ fun startRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.ROASTING_STATUS,
                 MachineNodeStatus.ON,
             )
@@ -35,7 +33,6 @@ fun startRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.BEAN_HOLDER,
                 MachineNodeStatus.ON
             )
@@ -43,7 +40,6 @@ fun startRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.PREHEAT_TEMPERATURE,
                 MachineNodeStatus.OFF
             )
@@ -51,7 +47,6 @@ fun startRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.GAS_LEVEL,
                 MachineNodeStatus.ON,
                 20
@@ -64,7 +59,6 @@ fun startRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.BEAN_HOLDER,
                 MachineNodeStatus.OFF
             )
@@ -81,7 +75,6 @@ fun endRoasting(
     coroutineScope.launch {
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.ROASTING_STATUS,
                 MachineNodeStatus.OFF,
             )
@@ -89,7 +82,6 @@ fun endRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.GAS_LEVEL,
                 MachineNodeStatus.OFF,
             )
@@ -97,7 +89,6 @@ fun endRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.PREHEAT_TEMPERATURE,
                 MachineNodeStatus.OFF,
             )
@@ -105,7 +96,6 @@ fun endRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.FAN_LEVEL,
                 MachineNodeStatus.ON,
                 60
@@ -114,7 +104,6 @@ fun endRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.COOLING_TRAY_FAN,
                 MachineNodeStatus.ON
             )
@@ -122,7 +111,6 @@ fun endRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.COOLING_TRAY_STIR,
                 MachineNodeStatus.ON
             )
@@ -130,7 +118,6 @@ fun endRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.DRUM_DOOR,
                 MachineNodeStatus.ON
             )
@@ -139,7 +126,6 @@ fun endRoasting(
         // Repeat Off Status
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.ROASTING_STATUS,
                 MachineNodeStatus.OFF,
             )
@@ -149,7 +135,6 @@ fun endRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.DRUM_DOOR,
                 MachineNodeStatus.OFF
             )
@@ -159,7 +144,6 @@ fun endRoasting(
 
         enqueueCommand(
             MachineStateInterpreter.generateControlCommand(
-                machineState.value,
                 MachineControlUnitIds.COOLING_TRAY_FAN,
                 MachineNodeStatus.OFF
             )
