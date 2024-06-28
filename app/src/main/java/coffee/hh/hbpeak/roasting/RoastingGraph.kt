@@ -48,7 +48,7 @@ fun RoastingGraph(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val backgroundColor = MaterialTheme.colorScheme.surfaceContainer
+    val backgroundColor = MaterialTheme.colorScheme.surface
     val textColor = MaterialTheme.colorScheme.onSurface
     val lineColor = MaterialTheme.colorScheme.onSurface
 
@@ -65,7 +65,6 @@ fun RoastingGraph(
             while (true) {
                 if (!isStartRoasting.value) {
                     roastingGraphViewModel.resetTimer()
-
                     delay(1000)
 
                     continue
@@ -78,7 +77,12 @@ fun RoastingGraph(
                     graphAppearance.value = graphAppearance.value.copy(
                         xMax = graphAppearance.value.xMax + 2
                     )
+                } else if (roastingGraphViewModel.elapseMinutes() < 1 &&
+                    graphAppearance.value.xMax > 12
+                ) {
+                    graphAppearance.value = GraphAppearance(backgroundColor, textColor, lineColor)
                 }
+
                 delay(500)
             }
         }
@@ -261,7 +265,9 @@ fun LineChart(
                     lineTo(startX + xAxisSpace * i, endY)
                 }
                 drawPath(
-                    lineXPath, color = graphAppearance.lineColor.copy(alpha = 0.5f), style = Stroke(
+                    lineXPath,
+                    color = graphAppearance.lineColor.copy(alpha = 0.5f),
+                    style = Stroke(
                         width = graphAppearance.graphAxisThickness / 2,
                         cap = StrokeCap.Round,
                         pathEffect = PathEffect.dashPathEffect(
@@ -285,7 +291,9 @@ fun LineChart(
                     lineTo(endX, endY - yAxisSpace * i)
                 }
                 drawPath(
-                    lineYPath, color = graphAppearance.lineColor.copy(alpha = 0.5f), style = Stroke(
+                    lineYPath,
+                    color = graphAppearance.lineColor.copy(alpha = 0.5f),
+                    style = Stroke(
                         width = graphAppearance.graphAxisThickness / 2,
                         cap = StrokeCap.Round,
                         pathEffect = PathEffect.dashPathEffect(

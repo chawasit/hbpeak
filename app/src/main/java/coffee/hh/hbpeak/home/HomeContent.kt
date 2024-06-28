@@ -4,6 +4,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -140,7 +141,7 @@ private fun HomeButtonCard(
             modifier = Modifier.padding(32.dp)
         ) {
             Row(
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = icon,
@@ -154,7 +155,7 @@ private fun HomeButtonCard(
                         .fillMaxWidth()
                         .padding(start = 16.dp),
                     textAlign = TextAlign.Start,
-                    style = MaterialTheme.typography.displaySmall,
+                    style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
             }

@@ -188,7 +188,7 @@ fun RoastingContent(
                 RoastingGraph(
                     machineState,
                     isStartRoasting = isStartRoasting,
-                    roastingGraphViewModel
+                    roastingGraphViewModel,
                 )
                 Timer(isStartRoasting)
             }
@@ -485,18 +485,18 @@ fun RoastingContentPreview() {
 
 @Composable
 fun Timer(isStartRoasting: MutableState<Boolean>) {
-    val roastingTime = remember { mutableStateOf(0) }
+    val roastingTime = remember { mutableIntStateOf(0) }
     val startCounting = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
 
     if (isStartRoasting.value && startCounting.value.not()) {
         startCounting.value = true
-        roastingTime.value = 0
+        roastingTime.intValue = 0
         LaunchedEffect(isStartRoasting) {
             coroutineScope.launch {
                 while (isStartRoasting.value) {
-                    roastingTime.value += 1
+                    roastingTime.intValue += 1
                     delay(1000)
                 }
                 startCounting.value = false
@@ -504,8 +504,8 @@ fun Timer(isStartRoasting: MutableState<Boolean>) {
         }
     }
 
-    val minutes = roastingTime.value / 60
-    val seconds = roastingTime.value % 60
+    val minutes = roastingTime.intValue / 60
+    val seconds = roastingTime.intValue % 60
 
     Text(
         text = String.format("%2d:%02d", minutes, seconds),
